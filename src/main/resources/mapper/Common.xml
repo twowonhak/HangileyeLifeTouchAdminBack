@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.CommonMapper">
+
+    <!-- 과 리스트 조회 -->
+    <select id="diagListSelect" resultType="com.hangileye.lifetouch.model.common.DiagModel">
+        SELECT  A003_EDTCODE AS diagCd,
+                A003_CODEKNM AS diagNm,
+                A003_EDTCODE || '.' || A003_CODEKNM as diag
+        FROM TB_A003_EDITCODE
+        WHERE A003_EDTID = 'C002'
+          AND NVL(TRIM(A003_USEYN), 'Y') = 'Y'
+        ORDER BY A003_SORT
+    </select>
+
+</mapper>

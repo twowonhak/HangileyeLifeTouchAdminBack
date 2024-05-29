@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@192.168.1.41:1521/EONMDB
+    username: EON_HIS
+    password: EON_HIS
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+  devtools:
+    restart:
+      enabled: 'true'
+    livereload:
+      enabled: 'true'
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: 'true'
+  sql:
+    init:
+      encoding: UTF-8
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      location: ${java.io.tmpdir}
+#      location: C:\Users\Hangil\Desktop\CallCenterFile
+      max-file-size: 100MB
+      max-request-size: 100MB
+  jpa:
+    show-sql: 'true'
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: '8084'
+
+mybatis:
+  mapper-locations: mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+#jwt:
+#  password : testPassword
+
+jwt:
+  header: Authorization
+  secret: Y2hlc3RudXQtbmlwcG9ucGFzcy1zcHJpbmdib290LWFjY2Vzc3Rva2VuLWp3dC1zZWNyZXRrZXktYmFzZTY0LWVuY29kZWQK
+
+  token-validity-in-seconds: 3600
+  token-validity-in-minutes: 60
+  token-validity-in-hours: 1
