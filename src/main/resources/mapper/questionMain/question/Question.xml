@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.question.QuestionMapper">
+
+    <!-- 목록 -->
+    <select id="listSelect" resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        SELECT F007_KEY AS KEY,
+               F007_CONTENT AS CONTENT,
+               SUBSTR(F007_USESTRDAT, 1, 4) || '-' || SUBSTR(F007_USESTRDAT, 5, 2) || '-' || SUBSTR(F007_USESTRDAT, 7, 2)    AS USESTRDAT,
+               SUBSTR(F007_USEENDDAT, 1, 4) || '-' || SUBSTR(F007_USEENDDAT, 5, 2) || '-' || SUBSTR(F007_USEENDDAT, 7, 2)    AS USEENDDAT
+        FROM HANGIL.TB_F007_QUESTIONCASE
+        WHERE F007_DELYN = 'N'
+    </select>
+
+    <!-- 상세 -->
+    <select id="detailSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        SELECT F007_KEY AS KEY,
+               F007_CONTENT AS CONTENT,
+               SUBSTR(F007_USESTRDAT, 1, 4) || '-' || SUBSTR(F007_USESTRDAT, 5, 2) || '-' || SUBSTR(F007_USESTRDAT, 7, 2)    AS USESTRDAT,
+               SUBSTR(F007_USEENDDAT, 1, 4) || '-' || SUBSTR(F007_USEENDDAT, 5, 2) || '-' || SUBSTR(F007_USEENDDAT, 7, 2)    AS USEENDDAT,
+               F007_CRDTIME AS CRDTIME,
+               F007_CRUSERID AS CRUSERID,
+               FN_EMPLOYEE_INFO(F007_CRUSERID) AS CRUSERNM,
+               F007_UPDTIME AS UPDTIME,
+               F007_UPUSERID AS UPUSERID,
+               FN_EMPLOYEE_INFO(F007_UPUSERID) AS UPUSERNM
+        FROM HANGIL.TB_F007_QUESTIONCASE
+        WHERE F007_KEY = #{key}
+    </select>
+
+    <!-- 질문 저장 -->
+    <insert id="insert" parameterType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        INSERT INTO HANGIL.TB_F007_QUESTIONCASE (F007_KEY,
+                                                 F007_CONTENT,
+                                                 F007_USESTRDAT,
+                                                 F007_USEENDDAT,
+                                                 F007_CRUSERID,
+                                                 F007_CRUSERIP)
+        VALUES ((SELECT LPAD(NVL(MAX(F007_KEY), 0) + 1, 8, '0') FROM HANGIL.TB_F007_QUESTIONCASE),
+                #{content},
+                REPLACE(#{useStrDat}, '-', ''),
+                REPLACE(#{useEndDat}, '-', ''),
+                #{crUserId},
+                #{crUserIp})
+    </insert>
+
+    <!-- 삭제 _ 사용중인지 확인 -->
+    <select id="caseUse" parameterType="String" resultType="int">
+        SELECT CASE
+                   WHEN
+                       EXISTS(SELECT NULL
+                              FROM HANGIL.TB_F005_CASE
+                              WHERE F005_PATKEY = #{key}) THEN 1
+                   ELSE 0 END AS result
+        FROM DUAL
+    </select>
+
+    <!-- 삭제 -->
+    <update id="delete" parameterType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        UPDATE HANGIL.TB_F007_QUESTIONCASE
+        SET F007_DELYN    = 'Y',
+            F007_UPDTIME  = SYSDATE,
+            F007_UPUSERID = #{upUserId},
+            F007_UPUSERIP = #{upUserIp}
+        WHERE F007_KEY = #{key}
+    </update>
+
+    <!-- 수정 -->
+    <update id="update" parameterType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        UPDATE HANGIL.TB_F007_QUESTIONCASE
+        SET F007_USESTRDAT = REPLACE(#{useStrDat}, '-', ''),
+            F007_USEENDDAT = REPLACE(#{useEndDat}, '-', ''),
+            F007_UPDTIME   = SYSDATE,
+            F007_UPUSERID  = #{upUserId},
+            F007_UPUSERIP  = #{upUserIp}
+        WHERE F007_KEY = #{key}
+    </update>
+
+</mapper>

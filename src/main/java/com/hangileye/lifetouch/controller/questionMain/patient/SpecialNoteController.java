@@ -1,8 +1,8 @@
-package com.hangileye.lifetouch.controller;
+package com.hangileye.lifetouch.controller.questionMain.patient;
 
-import com.hangileye.lifetouch.model.SpecialNoteModel;
+import com.hangileye.lifetouch.model.questionMain.patient.SpecialNoteModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
-import com.hangileye.lifetouch.service.SpecialNoteService;
+import com.hangileye.lifetouch.service.questionMain.patient.SpecialNoteService;
 import com.hangileye.lifetouch.utill.CookieManager;
 import com.hangileye.lifetouch.utill.InetAddressInfo;
 import lombok.extern.slf4j.Slf4j;

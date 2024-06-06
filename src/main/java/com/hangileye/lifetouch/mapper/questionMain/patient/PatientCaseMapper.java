@@ -1,6 +1,6 @@
-package com.hangileye.lifetouch.mapper;
+package com.hangileye.lifetouch.mapper.questionMain.patient;
 
-import com.hangileye.lifetouch.model.PatientCaseModel;
+import com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

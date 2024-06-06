@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hangileye.lifetouch.mapper.PatientCaseMapper">
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.patient.PatientCaseMapper">
 
     <!-- 목록 -->
-    <select id="listSelect" parameterType="string" resultType="com.hangileye.lifetouch.model.PatientCaseModel">
+    <select id="listSelect" parameterType="string" resultType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         SELECT F006_KEY AS KEY,
         F006_TYPE AS TYPE,
         F006_DIAGCD AS DIAGCD,
@@ -13,8 +13,8 @@
         F006_JOBTY AS JOBTY,
         F006_PAGTTY AS PAGTTY,
         F006_SPECIAL AS SPECIALNOTE,
-        F006_USESTRDAT AS USESTRDAT,
-        F006_USEENDDAT AS USEENDDAT,
+        SUBSTR(F006_USESTRDAT, 1, 4) || '-' || SUBSTR(F006_USESTRDAT, 5, 2) || '-' || SUBSTR(F006_USESTRDAT, 7, 2)    AS USESTRDAT,
+        SUBSTR(F006_USEENDDAT, 1, 4) || '-' || SUBSTR(F006_USEENDDAT, 5, 2) || '-' || SUBSTR(F006_USEENDDAT, 7, 2)    AS USEENDDAT,
         F006_CRUSERID AS CRUSERID
         FROM HANGIL.TB_F006_PATIENTCASE
         WHERE F006_DELYN = 'N'
@@ -26,7 +26,7 @@
     </select>
 
     <!-- 상세 -->
-    <select id="detailSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.PatientCaseModel">
+    <select id="detailSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         SELECT F006_KEY AS key,
                F006_TYPE        AS TYPE,
                F006_DIAGCD      AS DIAGCD,
@@ -49,7 +49,7 @@
     </select>
 
     <!-- 저장 -->
-    <insert id="insert" parameterType="com.hangileye.lifetouch.model.PatientCaseModel">
+    <insert id="insert" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         INSERT INTO HANGIL.TB_F006_PATIENTCASE (F006_KEY,
                                                 F006_TYPE,
                                                 F006_DIAGCD,
@@ -90,7 +90,7 @@
     </select>
 
     <!-- 삭제 -->
-    <update id="delete" parameterType="com.hangileye.lifetouch.model.PatientCaseModel">
+    <update id="delete" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         UPDATE HANGIL.TB_F006_PATIENTCASE
         SET F006_DELYN     = 'Y',
             F006_UPDTIME  = SYSDATE,
@@ -100,7 +100,7 @@
     </update>
 
     <!-- 삭제 -->
-    <update id="update" parameterType="com.hangileye.lifetouch.model.PatientCaseModel">
+    <update id="update" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         UPDATE HANGIL.TB_F006_PATIENTCASE
         SET F006_USESTRDAT = REPLACE(#{useStrDat}, '-', ''),
             F006_USEENDDAT = REPLACE(#{useEndDat}, '-', ''),

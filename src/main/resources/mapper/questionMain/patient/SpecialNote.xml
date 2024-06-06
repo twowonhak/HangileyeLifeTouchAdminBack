@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hangileye.lifetouch.mapper.SpecialNoteMapper">
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.patient.SpecialNoteMapper">
 
     <!-- 목록 -->
-    <select id="listSelect" resultType="com.hangileye.lifetouch.model.SpecialNoteModel">
+    <select id="listSelect" resultType="com.hangileye.lifetouch.model.questionMain.patient.SpecialNoteModel">
         SELECT F004_KEY AS key,
             F004_CONTENT AS content,
             F004_CRDTIME AS crDtime,
@@ -16,7 +16,7 @@
     </select>
 
     <!-- 상세 -->
-    <select id="detailSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.SpecialNoteModel">
+    <select id="detailSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.patient.SpecialNoteModel">
         SELECT F004_KEY AS key,
             F004_CONTENT AS content,
             F004_CRDTIME AS crDtime,
@@ -27,7 +27,7 @@
     </select>
 
     <!-- 저장 -->
-    <insert id="insert" parameterType="com.hangileye.lifetouch.model.SpecialNoteModel">
+    <insert id="insert" parameterType="com.hangileye.lifetouch.model.questionMain.patient.SpecialNoteModel">
         INSERT INTO HANGIL.TB_F004_SPECIALNOTE (F004_KEY,
                                                 F004_CONTENT,
                                                 F004_CRUSERID,
@@ -39,7 +39,7 @@
     </insert>
 
     <!-- 삭제 -->
-    <update id="delete" parameterType="com.hangileye.lifetouch.model.SpecialNoteModel">
+    <update id="delete" parameterType="com.hangileye.lifetouch.model.questionMain.patient.SpecialNoteModel">
         UPDATE HANGIL.TB_F004_SPECIALNOTE
         SET F004_DELYN     = 'Y',
             F004_UPDTIME  = SYSDATE,

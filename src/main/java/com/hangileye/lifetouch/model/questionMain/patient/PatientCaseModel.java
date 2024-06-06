@@ -1,4 +1,4 @@
-package com.hangileye.lifetouch.model;
+package com.hangileye.lifetouch.model.questionMain.patient;
 
 import lombok.Data;
 

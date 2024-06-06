@@ -16,7 +16,7 @@ public class ResponseModel {
     private String doct;                // 진료의 코드
     
     private String patCase;             // 환자 케이스 키
-    private String queKey;              // 질문 키
+    private String key;              // 질문 키
     private String queTxt;              // 질문 내용
     private String exaKey;              // 보기 키
     private String exaTxt;              // 보기 내용

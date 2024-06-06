@@ -1,4 +1,4 @@
-package com.hangileye.lifetouch.controller;
+package com.hangileye.lifetouch.controller.questionMain;
 
 import com.hangileye.lifetouch.model.LoginModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;

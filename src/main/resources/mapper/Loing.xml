@@ -15,7 +15,7 @@
 
     <!-- 권한체크 -->
     <select id="loginRight" parameterType="string" resultType="int">
-        SELECT 1
+        SELECT COUNT(*)
         FROM DUAL
         WHERE EXISTS(SELECT NULL FROM DUAL WHERE FN_EDIT_INFO('HP10', 'LIFETOUCH') LIKE '%' || #{id} || '%')
     </select>

@@ -1,8 +1,8 @@
-package com.hangileye.lifetouch.controller;
+package com.hangileye.lifetouch.controller.questionMain.patient;
 
-import com.hangileye.lifetouch.model.PatientCaseModel;
+import com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
-import com.hangileye.lifetouch.service.PatientCaseService;
+import com.hangileye.lifetouch.service.questionMain.patient.PatientCaseService;
 import com.hangileye.lifetouch.utill.CookieManager;
 import com.hangileye.lifetouch.utill.InetAddressInfo;
 import lombok.extern.slf4j.Slf4j;

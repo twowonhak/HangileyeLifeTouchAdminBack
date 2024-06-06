@@ -1,7 +1,7 @@
-package com.hangileye.lifetouch.service;
+package com.hangileye.lifetouch.service.questionMain.patient;
 
-import com.hangileye.lifetouch.mapper.SpecialNoteMapper;
-import com.hangileye.lifetouch.model.SpecialNoteModel;
+import com.hangileye.lifetouch.mapper.questionMain.patient.SpecialNoteMapper;
+import com.hangileye.lifetouch.model.questionMain.patient.SpecialNoteModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
