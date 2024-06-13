@@ -26,11 +26,11 @@ public class PatientCaseModel {
     private String delYn;           // 삭제 여부
     private String crDtime;         // 등룍 일시
     private String crUserId;        // 등록 ID
-    private String crUserNm;        // 등록 ID
+    private String crUserNm;        // 등록자
     private String crUserIp;        // 등록 IP
     private String upDtime;         // 수정 일시
     private String upUserId;        // 수정 ID
-    private String upUserNm;        // 수정 IP
+    private String upUserNm;        // 수정자
     private String upUserIp;        // 수정 IP
 
     private String useDat;          // 조회 일자

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.queCase.CaseMapper">
+
+    <!-- 목록 -->
+    <select id="queListSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        SELECT F007_KEY AS KEY,
+               F007_CONTENT AS CONTENT,
+               SUBSTR(F007_USESTRDAT, 1, 4) || '-' || SUBSTR(F007_USESTRDAT, 5, 2) || '-' || SUBSTR(F007_USESTRDAT, 7, 2)    AS USESTRDAT,
+               SUBSTR(F007_USEENDDAT, 1, 4) || '-' || SUBSTR(F007_USEENDDAT, 5, 2) || '-' || SUBSTR(F007_USEENDDAT, 7, 2)    AS USEENDDAT
+        FROM HANGIL.TB_F007_QUESTIONCASE
+        WHERE F007_DELYN = 'N'
+    </select>
+
+    <!-- 목록 -->
+    <select id="keySelect" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel"
+            resultType="String">
+        SELECT F006_KEY
+        FROM HANGIL.TB_F006_PATIENTCASE
+        WHERE 1 = 1
+        <if test="type != null and type != ''">
+        </if>
+        <if test="diagCd != null and diagCd != ''">
+            AND F006_DIAGCD = #{diagCd}
+        </if>
+        <if test="sex != null and sex != ''">
+            AND F006_SEX = #{sex}
+        </if>
+        <if test="birth != null and birth != ''">
+            AND F006_BIRTH = #{birth}
+        </if>
+        <if test="preYn != null and preYn != ''">
+            AND F006_PREYN = #{preYn}
+        </if>
+        <if test="pagtTy != null and pagtTy != ''">
+            AND F006_PAGTTY = #{pagtTy}
+        </if>
+        <if test="specialNote != null and specialNote != ''">
+            AND F006_SPECIAL = #{specialNote}
+        </if>
+    </select>
+
+    <!-- 저장 -->
+    <insert id="insert" parameterType="com.hangileye.lifetouch.model.questionMain.queCase.CaseModel">
+        INSERT INTO HANGIL.TB_F005_CASE (F005_PATKEY,
+                                         F005_QUEKEY,
+                                         F005_CRUSERID,
+                                         F005_CRUSERIP)
+        VALUES (#{patKey},
+                #{queKey},
+                #{crUserId},
+                #{crUserIp})
+    </insert>
+
+</mapper>

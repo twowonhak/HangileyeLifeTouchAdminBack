@@ -13,7 +13,7 @@ public class ExampleModel {
     private String key;             // 키
     private String queKey;          // 질문키
 
-    private String type;            // 타입 [ T : 프리 텍스트 / C : 체크박스  ]
+    private String type;            // 타입 [ T : 텍스트 / C : 체크박스  ]
     private String content;         // 질문 내용
     private String sort;            // 질문 순서
 

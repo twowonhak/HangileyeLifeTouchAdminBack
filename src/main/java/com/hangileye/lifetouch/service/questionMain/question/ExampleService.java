@@ -2,11 +2,7 @@ package com.hangileye.lifetouch.service.questionMain.question;
 
 import com.hangileye.lifetouch.mapper.questionMain.question.ExampleMapper;
 import com.hangileye.lifetouch.model.questionMain.question.ExampleModel;
-import com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
-import com.hangileye.lifetouch.utill.CookieManager;
-import com.hangileye.lifetouch.utill.InetAddressInfo;
-import jdk.nashorn.internal.ir.FunctionNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -122,6 +118,7 @@ public class ExampleService {
     /*
      * @Description : 순서 수정
      * */
+    @Transactional
     public ResponseEntity<ResponseData> sortUpdate(@RequestBody List<ExampleModel> exampleModelList) {
         ResponseData res = new ResponseData();
         try {

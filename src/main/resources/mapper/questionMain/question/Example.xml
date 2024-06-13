@@ -6,7 +6,7 @@
     <!-- 목록 -->
     <select id="listSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.question.ExampleModel">
         SELECT F008_KEY AS KEY,
-               DECODE(F008_TYPE, 'C', '체크박스', 'T','프리 텍스트') AS TYPE,
+               DECODE(F008_TYPE, 'C', '체크박스', 'T','텍스트') AS TYPE,
                F008_CONTENT AS  CONTENT,
                REPLACE(F008_SORT, '0','') AS SORT
         FROM HANGIL.TB_F008_EXAMPLE

@@ -39,6 +39,12 @@ public class ResponseData {
         resultMessage = ResultEnum.NO_RIGHT.getMessage();
     }
 
+    // 해당 조건에는 생성된 환자 케이스가 없습니다.
+    public void setNoPatKey() {
+        resultCode = ResultEnum.NO_PATKEY.getCode();
+        resultMessage = ResultEnum.NO_PATKEY.getMessage();
+    }
+
     // 조회된 데이터가 없습니다.
     public void setErrNoData() {
         resultCode = ResultEnum.ERR_NO_DATA.getCode();

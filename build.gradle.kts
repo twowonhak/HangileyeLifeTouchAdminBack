@@ -7,7 +7,7 @@ plugins {
 
 group = "com.hangileye"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
     compileOnly {
@@ -22,19 +22,18 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
 //    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3")
     // implementation("org.springframework.boot:spring-boot-starter-security")
-    compileOnly("org.projectlombok:lombok")
+    implementation("org.projectlombok:lombok")
 
-    runtimeOnly("com.oracle.database.jdbc:ojdbc8")
+    implementation("com.oracle.database.jdbc:ojdbc8")
 
     annotationProcessor("org.projectlombok:lombok")
     implementation("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compileOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-devtools")
     implementation("com.oracle.ojdbc:orai18n:19.3.0.0")
 
     implementation("org.webjars:sockjs-client:1.5.1")
@@ -56,13 +55,16 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.9")
 
 //    implementation("com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2")
-    implementation("net.java.dev.jna:jna:5.12.1")
-    implementation("net.java.dev.jna:jna-platform:5.12.1")
+    implementation ("net.java.dev.jna:jna:5.12.1")
+    implementation ("net.java.dev.jna:jna-platform:5.12.1")
 
     // JWT
-    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
-    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+    implementation ("io.jsonwebtoken:jjwt-api:0.11.5")
+    implementation ("io.jsonwebtoken:jjwt-impl:0.11.5")
+    implementation ("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+    implementation ("org.aspectj:aspectjrt:1.9.6")
+    implementation ("org.aspectj:aspectjweaver:1.9.6")
 }
 
 tasks.withType<Test> {

@@ -9,6 +9,7 @@ public enum ResultEnum implements Codable {
     ERR_BAD_REQUEST("4400", "잘못된 요청입니다."),
     NO_LOGIN_INFO("2001", "로그인 정보가 없거나, ID 또는 PW가 잘못 되었습니다."),
     NO_RIGHT("2002", "해당 계정은 권한이 없습니다."),
+    NO_PATKEY("2003", "해당 조건에는 생성된 환자 케이스가 없습니다."),
     ERR_NO_DATA("2000", "조회된 데이터가 없습니다."),
     ERR_NO_CHARTNO("2100", "입력 하신 정보의 차트번호와 URL KEY 값이 일치 하지 않습니다."),
     ERR_USE("2200", "사용 중인 데이터 입니다. 삭제를 원하시면 사용 중인 데이터를 삭제 해주세요."),
