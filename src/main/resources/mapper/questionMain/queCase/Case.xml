@@ -3,33 +3,41 @@
 
 <mapper namespace="com.hangileye.lifetouch.mapper.questionMain.queCase.CaseMapper">
 
-    <!-- 목록 -->
-    <select id="queListSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+    <!-- 추가 된 질문 조회 -->
+    <select id="listSelect" parameterType="String"
+            resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
         SELECT F007_KEY AS KEY,
                F007_CONTENT AS CONTENT,
                SUBSTR(F007_USESTRDAT, 1, 4) || '-' || SUBSTR(F007_USESTRDAT, 5, 2) || '-' || SUBSTR(F007_USESTRDAT, 7, 2)    AS USESTRDAT,
                SUBSTR(F007_USEENDDAT, 1, 4) || '-' || SUBSTR(F007_USEENDDAT, 5, 2) || '-' || SUBSTR(F007_USEENDDAT, 7, 2)    AS USEENDDAT
         FROM HANGIL.TB_F007_QUESTIONCASE
         WHERE F007_DELYN = 'N'
+          AND F007_KEY IN (SELECT F005_QUEKEY FROM HANGIL.TB_F005_CASE WHERE F005_PATKEY = #{key} AND F005_DELYN = 'N')
     </select>
 
-    <!-- 목록 -->
+    <!-- 추가 할 질문 조회 -->
+    <select id="queListSelect" parameterType="String"
+            resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        SELECT F007_KEY AS KEY,
+               F007_CONTENT AS CONTENT,
+               SUBSTR(F007_USESTRDAT, 1, 4) || '-' || SUBSTR(F007_USESTRDAT, 5, 2) || '-' || SUBSTR(F007_USESTRDAT, 7, 2)    AS USESTRDAT,
+               SUBSTR(F007_USEENDDAT, 1, 4) || '-' || SUBSTR(F007_USEENDDAT, 5, 2) || '-' || SUBSTR(F007_USEENDDAT, 7, 2)    AS USEENDDAT
+        FROM HANGIL.TB_F007_QUESTIONCASE
+        WHERE F007_DELYN = 'N'
+          AND F007_KEY NOT IN (SELECT F005_QUEKEY FROM HANGIL.TB_F005_CASE WHERE F005_PATKEY = #{key} AND F005_DELYN = 'N')
+    </select>
+
+    <!-- 환자 케이스 조회 -->
     <select id="keySelect" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel"
             resultType="String">
         SELECT F006_KEY
         FROM HANGIL.TB_F006_PATIENTCASE
         WHERE 1 = 1
-        <if test="type != null and type != ''">
-        </if>
-        <if test="diagCd != null and diagCd != ''">
-            AND F006_DIAGCD = #{diagCd}
-        </if>
-        <if test="sex != null and sex != ''">
-            AND F006_SEX = #{sex}
-        </if>
-        <if test="birth != null and birth != ''">
-            AND F006_BIRTH = #{birth}
-        </if>
+        AND F006_DELYN = 'N'
+        AND F006_TYPE = #{type}
+        AND F006_DIAGCD = #{diagCd}
+        AND F006_SEX = #{sex}
+        AND F006_BIRTH = #{birth}
         <if test="preYn != null and preYn != ''">
             AND F006_PREYN = #{preYn}
         </if>
@@ -39,18 +47,64 @@
         <if test="specialNote != null and specialNote != ''">
             AND F006_SPECIAL = #{specialNote}
         </if>
+        <if test="preYn == ''">
+            AND F006_PREYN IS NULL
+        </if>
+        <if test="pagtTy == ''">
+            AND F006_PAGTTY IS NULL
+        </if>
+        <if test="specialNote == ''">
+            AND F006_SPECIAL IS NULL
+        </if>
     </select>
 
     <!-- 저장 -->
     <insert id="insert" parameterType="com.hangileye.lifetouch.model.questionMain.queCase.CaseModel">
         INSERT INTO HANGIL.TB_F005_CASE (F005_PATKEY,
                                          F005_QUEKEY,
+                                         F005_SORT,
                                          F005_CRUSERID,
                                          F005_CRUSERIP)
         VALUES (#{patKey},
                 #{queKey},
+                (SELECT LPAD(NVL(MAX(F005_SORT), 0) + 1, 2, '0') FROM HANGIL.TB_F005_CASE WHERE F005_PATKEY = #{patKey}),
                 #{crUserId},
                 #{crUserIp})
     </insert>
+
+    <!-- 저장 된 질문 삭제 -->
+    <update id="delete" parameterType="com.hangileye.lifetouch.model.questionMain.queCase.CaseModel">
+        UPDATE HANGIL.TB_F005_CASE
+        SET F005_DELYN  = 'Y',
+                F005_UPDTIME  = SYSDATE,
+                F005_UPUSERID = #{upUserId},
+                F005_UPUSERIP = #{upUserIp}
+        WHERE F005_PATKEY = #{patKey}
+          AND F005_QUEKEY = #{queKey}
+    </update>
+
+    <!-- 순서 수정 -->
+    <update id="sortUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.queCase.CaseModel">
+        UPDATE HANGIL.TB_F005_CASE
+        SET F005_SORT  = LPAD(#{sort}, 2, 0)
+        WHERE F005_PATKEY = #{patKey}
+        AND   F005_QUEKEY = #{queKey}
+    </update>
+
+    <!-- 등록 된 질문 순서 목록 -->
+    <select id="sortListSelect" parameterType="String"
+            resultType="com.hangileye.lifetouch.model.questionMain.queCase.CaseModel">
+        SELECT
+            F005_PATKEY AS PATKEY,
+            F005_QUEKEY AS QUEKEY,
+            F005_QUEKEY AS KEY,
+            F007_CONTENT AS CONTENT,
+            F005_SORT AS SORT
+        FROM HANGIL.TB_F005_CASE, HANGIL.TB_F007_QUESTIONCASE
+        WHERE F005_PATKEY = #{patKey}
+          AND F005_DELYN = 'N'
+          AND F007_KEY = F005_QUEKEY
+        ORDER BY SORT ASC
+    </select>
 
 </mapper>

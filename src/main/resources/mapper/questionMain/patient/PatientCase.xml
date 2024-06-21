@@ -97,10 +97,11 @@
         WHERE F006_KEY = #{key}
     </update>
 
-    <!-- 삭제 -->
+    <!-- 수정 -->
     <update id="update" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         UPDATE HANGIL.TB_F006_PATIENTCASE
-        SET F006_USESTRDAT = REPLACE(#{useStrDat}, '-', ''),
+        SET F006_SPECIAL =  #{specialNote},
+            F006_USESTRDAT = REPLACE(#{useStrDat}, '-', ''),
             F006_USEENDDAT = REPLACE(#{useEndDat}, '-', ''),
             F006_UPDTIME  = SYSDATE,
             F006_UPUSERID = #{upUserId},

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -27,7 +28,15 @@ public class CaseController {
     }
 
     /*
-     * @Description : 질문 조회
+     * @Description : 등록 된 질문 조회
+     * */
+    @RequestMapping("listSelectApi")
+    public ResponseData listSelect(@RequestBody PatientCaseModel patientCaseModel) {
+        return caseService.listSelect(patientCaseModel.getKey()).getBody();
+    }
+
+    /*
+     * @Description : 추가 할 질문 조회
      * */
     @RequestMapping("queListSelectApi")
     public ResponseData queListSelect(@RequestBody PatientCaseModel patientCaseModel) {
@@ -50,6 +59,36 @@ public class CaseController {
         caseModel.setCrUserId(CookieManager.getCookie(response, "ID"));
         caseModel.setCrUserIp(InetAddressInfo.getClientIP());
         return caseService.insert(caseModel).getBody();
+    }
+
+    /*
+     * @Description : 저장 된 질문 삭제
+     * */
+    @RequestMapping("deleteApi")
+    public ResponseData delete(HttpServletRequest response, @RequestBody CaseModel caseModel) {
+        caseModel.setUpUserId(CookieManager.getCookie(response, "ID"));
+        caseModel.setUpUserIp(InetAddressInfo.getClientIP());
+        return caseService.delete(caseModel).getBody();
+    }
+
+    /*
+     * @Description : 등록 된 질문 순서 목록
+     * */
+    @RequestMapping("sortListSelectApi")
+    public ResponseData sortListSelect(@RequestBody CaseModel caseModel) {
+        return caseService.sortListSelect(caseModel.getPatKey()).getBody();
+    }
+
+    /*
+     * @Description : 순서 수정
+     * */
+    @RequestMapping("sortUpdateApi")
+    public ResponseData sortUpdate(HttpServletRequest response, @RequestBody List<CaseModel> caseModelList) {
+        for (CaseModel caseModel : caseModelList) {
+            caseModel.setUpUserId(CookieManager.getCookie(response, "ID"));
+            caseModel.setUpUserIp(InetAddressInfo.getClientIP());
+        }
+        return caseService.sortUpdate(caseModelList).getBody();
     }
 
 }

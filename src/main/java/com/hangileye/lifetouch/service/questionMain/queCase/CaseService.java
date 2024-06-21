@@ -3,17 +3,15 @@ package com.hangileye.lifetouch.service.questionMain.queCase;
 import com.hangileye.lifetouch.mapper.questionMain.queCase.CaseMapper;
 import com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel;
 import com.hangileye.lifetouch.model.questionMain.queCase.CaseModel;
-import com.hangileye.lifetouch.model.questionMain.question.ExampleModel;
 import com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
-import com.sun.tools.jconsole.JConsoleContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.authenticator.SavedRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -28,7 +26,25 @@ public class CaseService {
     }
 
     /*
-     * @Description : 질문 조회
+     * @Description : 추가 된 질문 조회
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> listSelect(String queKey) {
+        ResponseData res = new ResponseData();
+        try {
+            List<QuestionCaseModel> list = caseMapper.listSelect(queKey);
+            res.setData(list);
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            res.setSystem();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /*
+     * @Description : 추가 할 질문 조회
      * */
     @Transactional
     public ResponseEntity<ResponseData> queListSelect(String queKey) {
@@ -87,4 +103,57 @@ public class CaseService {
         }
     }
 
+    /*
+     * @Description : 저장 된 질문 삭제
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> delete(CaseModel caseModel) {
+        ResponseData res = new ResponseData();
+        try {
+            caseMapper.delete(caseModel);
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            res.setSystem();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /*
+     * @Description : 순서 수정
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> sortUpdate(@RequestBody List<CaseModel> caseModelList) {
+        ResponseData res = new ResponseData();
+        try {
+            for (CaseModel caseModel : caseModelList) {
+                caseMapper.sortUpdate(caseModel);
+            }
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            res.setSystem();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /*
+     * @Description : 등록 된 질문 순서 목록
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> sortListSelect(String patKey) {
+        ResponseData res = new ResponseData();
+        try {
+            List<CaseModel> list = caseMapper.sortListSelect(patKey);
+            res.setData(list);
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            res.setSystem();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

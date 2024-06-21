@@ -2,16 +2,24 @@ package com.hangileye.lifetouch.service.questionMain.patient;
 
 import com.hangileye.lifetouch.mapper.CodeMapper;
 import com.hangileye.lifetouch.mapper.questionMain.patient.PatientCaseMapper;
+import com.hangileye.lifetouch.mapper.questionMain.queCase.CaseMapper;
 import com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel;
 import com.hangileye.lifetouch.model.common.CodeModel;
+import com.hangileye.lifetouch.model.questionMain.queCase.CaseModel;
+import com.hangileye.lifetouch.model.questionMain.question.ExampleModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
+import com.hangileye.lifetouch.utill.CookieManager;
+import com.hangileye.lifetouch.utill.InetAddressInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
@@ -19,10 +27,12 @@ import java.util.List;
 public class PatientCaseService {
 
     private final PatientCaseMapper patientCaseMapper;
+    private final CaseMapper caseMapper;
     private final CodeMapper codeMapper;
 
-    public PatientCaseService(PatientCaseMapper patientCaseMapper, CodeMapper codeMapper) {
+    public PatientCaseService(PatientCaseMapper patientCaseMapper, CaseMapper caseMapper, CodeMapper codeMapper) {
         this.patientCaseMapper = patientCaseMapper;
+        this.caseMapper = caseMapper;
         this.codeMapper = codeMapper;
     }
 
@@ -106,6 +116,7 @@ public class PatientCaseService {
         ResponseData res = new ResponseData();
         try {
             patientCaseMapper.insert(patientCaseModel);
+            res.setData(caseMapper.keySelect(patientCaseModel));
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
@@ -153,5 +164,4 @@ public class PatientCaseService {
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
         }
     }
-
 }

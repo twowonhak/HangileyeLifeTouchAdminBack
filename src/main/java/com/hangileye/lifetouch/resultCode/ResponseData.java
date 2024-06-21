@@ -21,6 +21,7 @@ public class ResponseData {
         resultMessage = ResultEnum.ERR_PARAM_.getMessage();
     }
 
+
     // 잘못된 요청입니다.
     public void setErrBadRequest() {
         resultCode = ResultEnum.ERR_BAD_REQUEST.getCode();

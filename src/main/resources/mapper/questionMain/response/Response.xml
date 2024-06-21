@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.response.ResponseMapper">
+
+    <select id="responseResultListSelect" parameterType="com.hangileye.lifetouch.model.common.AppointmentModel"
+            resultType="com.hangileye.lifetouch.model.questionMain.response.ResponseModel">
+        SELECT
+            F009_PATCASE AS PATCASE,
+            F009_QUETXT AS QUETXT,
+            F009_EXATXT AS EXATXT,
+            F009_RESTXT AS RESTXT,
+            F009_EXATYPE AS EXATYPE,
+            FN_EDIT_INFO('C002',F009_DIAGCD) AS DIAGNM,
+            FN_EMPLOYEE_INFO (F009_DOCTCD) AS DOCTNM,
+            FN_EDIT_INFO('W121',F009_APPOTYPE) AS APPONM,
+            F009_CRDIVICETY AS DIVICETY,
+            F009_CROSNM AS OSNM,
+            F009_CRBROWESERNM AS BROWSERNM,
+            F009_CRDTIME AS CRDTIME
+        FROM HANGIL.TB_F009_RESPONSE
+        WHERE F009_CHARTNO = #{chartNo}
+          AND F009_APPDAT = #{appDat}
+          AND F009_DIAGCD = #{diagCd}
+          AND F009_DOCTCD = #{doctCd}
+
+    </select>
+
+
+</mapper>

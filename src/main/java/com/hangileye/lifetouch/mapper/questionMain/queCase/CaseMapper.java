@@ -13,9 +13,15 @@ public interface CaseMapper {
 
     String keySelect(PatientCaseModel patientCaseModel);
 
-    List<PatientCaseModel> listSelect(String patKey);
+    List<QuestionCaseModel> listSelect(String patKey);
 
     void insert(CaseModel caseModel);
 
     List<QuestionCaseModel> queListSelect(String queKey);
+
+    void delete(CaseModel caseModel);
+
+    void sortUpdate(CaseModel caseModel);
+
+    List<CaseModel> sortListSelect(String patKey);
 }

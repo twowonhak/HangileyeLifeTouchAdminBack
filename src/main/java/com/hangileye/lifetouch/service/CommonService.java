@@ -1,6 +1,7 @@
 package com.hangileye.lifetouch.service;
 
 import com.hangileye.lifetouch.mapper.CommonMapper;
+import com.hangileye.lifetouch.model.common.PatInfoModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +28,48 @@ public class CommonService {
         ResponseData res = new ResponseData();
         try {
             res.setData(commonMapper.diagListSelect());
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            res.setSystem();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /*
+     * @Description : 환자 정보
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> chartNoSelect(String chartNo) {
+        ResponseData res = new ResponseData();
+        try {
+
+            PatInfoModel model = commonMapper.chartNoSelect(chartNo);
+
+            if (model != null) {
+                res.setData(model);
+                res.setSuccess();
+            } else {
+                res.setErrNoData();
+            }
+
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            res.setSystem();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /*
+     * @Description : 예약
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> appointmentListSelect(String chartNo) {
+        ResponseData res = new ResponseData();
+        try {
+            res.setData(commonMapper.appointmentListSelect(chartNo));
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {

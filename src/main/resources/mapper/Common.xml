@@ -14,4 +14,49 @@
         ORDER BY A003_SORT
     </select>
 
+    <!-- 환자 정보 -->
+    <select id="chartNoSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.common.PatInfoModel">
+        SELECT
+            A110_CHARTNO AS CHARTNO,
+            A110_PATNM AS PATNM,
+            FN_AGE(A110_BIRTH) AS AGE,
+            A110_SEX AS SEX,
+            A110_POSTNO AS POSTNO,
+            A110_TELNO AS TELNO,
+            A110_MOBNO AS MOBNO,
+            A110_BIRTH AS BIRTH,
+            A110_INSUCLS AS INSUCLS,
+            A110_INSUSUB AS INSUSUB
+        FROM TB_A110_PATINFO
+        WHERE LTRIM(A110_CHARTNO, '0') = #{chartNo}
+    </select>
+
+    <!-- 환자 예약 (취소 예약 제외) -->
+    <select id="appointmentListSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.common.AppointmentModel">
+        SELECT
+            ROWNUM AS SEQ,
+            G044_CHARTNO AS CHARTNO,
+            G044_APPDAT AS APPDAT,
+            TO_CHAR(TO_DATE(G044_APPDAT, 'YYYYMMDD'), 'YYYY-MM-DD') || ' (' ||
+            TO_CHAR(TO_DATE(G044_APPDAT, 'YYYYMMDD'), 'dy') || ')' AS APPDATDY,
+            G044_APPTIME AS APPTIME,
+            FN_EDIT_INFO('C002',G044_DIAGCD) AS DIAGNM,
+            G044_DIAGCD AS DIAGCD,
+            FN_EMPLOYEE_INFO (G044_DOCT) AS DOCTNM,
+            G044_DOCT AS DOCTCD,
+            G044_APPOTYPE AS APPOTYPE,
+            FN_EDIT_INFO('W121',G044_APPOTYPE) AS APPONM,
+            (SELECT 'O' FROM TB_A220_VISTINFO
+             WHERE A220_VISTDAT = G044_APPDAT
+               AND A220_CHARTNO = G044_CHARTNO) AS VISTYN,
+            (SELECT 'O' FROM HANGIL.TB_F009_RESPONSE
+             WHERE F009_CHARTNO = G044_CHARTNO
+               AND F009_APPDAT = G044_APPDAT
+               AND ROWNUM = 1) AS QUEYN
+        FROM TB_G044_APPOINTMENTEYE
+        WHERE G044_CHARTNO = #{chartNo}
+          AND G044_JUPSUST = 'R'
+        ORDER BY G044_APPDAT DESC
+    </select>
+
 </mapper>

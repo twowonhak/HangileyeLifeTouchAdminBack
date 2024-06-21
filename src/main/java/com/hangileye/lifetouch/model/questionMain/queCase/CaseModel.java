@@ -12,8 +12,11 @@ public class CaseModel {
 
     private String patKey;          // 환자 케이스 키
     private String queKey;          // 질문 키
+    private String key;             // 질문 키
 
-    private String[] queKeyArr;          // 질문 키
+    private String[] queKeyArr;     // 질문 키
+    private String sort;            // 순서
+    private String content;         // 내용
 
     private String delYn;           // 삭제 여부
     private String crDtime;         // 등룍 일시
