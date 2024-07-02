@@ -2,6 +2,8 @@ package com.hangileye.lifetouch.model.questionMain.question;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+
 /*
  * TB : TB_F007_QUESTIONCASE
  * COMMENT : 문진_질문_케이스
@@ -14,6 +16,7 @@ public class QuestionCaseModel {
 
     private String content;         // 내용
     private String sort;            // 순서
+    private String exampleArr;    // 보기들
     
     private String useStrDat;       // 적용 시작 일자
     private String useEndDat;       // 적용 종요 일자

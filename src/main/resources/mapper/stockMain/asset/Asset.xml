@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.stockMain.asset.AssetMapper">
+
+    <select id="mainListSelect" resultType="com.hangileye.lifetouch.model.stockMain.asset.AssetModel">
+        SELECT
+            D002_MAINKEY AS ASSMAINKEY,
+            D002_MAINNM AS ASSMAINNM
+        FROM HANGIL.TB_D002_ASSETCODE
+        GROUP BY D002_MAINKEY, D002_MAINNM
+        ORDER BY D002_MAINNM
+    </select>
+
+    <select id="subListSelect" resultType="com.hangileye.lifetouch.model.stockMain.asset.AssetModel">
+        SELECT
+            D002_MAINKEY AS ASSMAINKEY,
+            D002_SUBKEY AS ASSSUBKEY,
+            D002_SUBNM AS ASSSUBNM
+        FROM HANGIL.TB_D002_ASSETCODE
+        ORDER BY  D002_SUBKEY
+    </select>
+
+    <insert id="insert" parameterType="com.hangileye.lifetouch.model.stockMain.asset.AssetModel">
+        INSERT INTO HANGIL.TB_D002_ASSETCODE
+        (D002_ID,
+         D002_NAME)
+        VALUES ((SELECT LPAD(NVL(MAX(D002_ID), 0) + 1, 2, '0') FROM HANGIL.TB_D002_ASSETCODE),
+                #{name})
+    </insert>
+
+</mapper>

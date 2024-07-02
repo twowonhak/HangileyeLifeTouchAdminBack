@@ -5,8 +5,9 @@
 
     <!-- 과 리스트 조회 -->
     <select id="diag" resultType="com.hangileye.lifetouch.model.common.CodeModel">
-        SELECT A003_EDTCODE AS CODE,
-               A003_CODEKNM AS NAME
+        SELECT
+            A003_EDTCODE AS CODE,
+            A003_CODEKNM AS NAME
         FROM TB_A003_EDITCODE
         WHERE A003_EDTID = 'C002'
           AND NVL(TRIM(A003_USEYN), 'Y') = 'Y'

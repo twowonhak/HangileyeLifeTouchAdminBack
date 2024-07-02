@@ -5,17 +5,19 @@
 
     <!-- 로그인  -->
     <select id="login" parameterType="com.hangileye.lifetouch.model.LoginModel" resultType="com.hangileye.lifetouch.model.LoginModel">
-        SELECT P110_USER_ID                         AS ID,
-               FN_EDIT_INFO('W009', P110_USER_DEPT) AS DEPT,
-               P110_USER_NM                         AS NAME
-        FROM TB_P110_EMPLOYEE
+        SELECT
+            P110_USER_ID                         AS ID,
+            FN_EDIT_INFO('W009', P110_USER_DEPT) AS DEPT,
+            P110_USER_NM                         AS NAME
+         FROM TB_P110_EMPLOYEE
         WHERE P110_USER_ID = #{id}
           AND IMXDES(P110_USER_PASS_ENC) = #{pw}
     </select>
 
     <!-- 권한체크 -->
     <select id="loginRight" parameterType="string" resultType="int">
-        SELECT COUNT(*)
+        SELECT
+            COUNT(*)
         FROM DUAL
         WHERE EXISTS(SELECT NULL FROM DUAL WHERE FN_EDIT_INFO('HP10', 'LIFETOUCH') LIKE '%' || #{id} || '%')
     </select>

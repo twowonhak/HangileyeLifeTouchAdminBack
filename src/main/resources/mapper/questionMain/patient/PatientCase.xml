@@ -4,7 +4,8 @@
 <mapper namespace="com.hangileye.lifetouch.mapper.questionMain.patient.PatientCaseMapper">
 
     <!-- 목록 -->
-    <select id="listSelect" parameterType="string" resultType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
+    <select id="listSelect" parameterType="string"
+            resultType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         SELECT F006_KEY AS KEY,
         F006_TYPE AS TYPE,
         F006_DIAGCD AS DIAGCD,
@@ -13,8 +14,10 @@
         F006_JOBTY AS JOBTY,
         F006_PAGTTY AS PAGTTY,
         F006_SPECIAL AS SPECIALNOTE,
-        SUBSTR(F006_USESTRDAT, 1, 4) || '-' || SUBSTR(F006_USESTRDAT, 5, 2) || '-' || SUBSTR(F006_USESTRDAT, 7, 2)    AS USESTRDAT,
-        SUBSTR(F006_USEENDDAT, 1, 4) || '-' || SUBSTR(F006_USEENDDAT, 5, 2) || '-' || SUBSTR(F006_USEENDDAT, 7, 2)    AS USEENDDAT,
+        SUBSTR(F006_USESTRDAT, 1, 4) || '-' || SUBSTR(F006_USESTRDAT, 5, 2) || '-' || SUBSTR(F006_USESTRDAT, 7, 2) AS
+        USESTRDAT,
+        SUBSTR(F006_USEENDDAT, 1, 4) || '-' || SUBSTR(F006_USEENDDAT, 5, 2) || '-' || SUBSTR(F006_USEENDDAT, 7, 2) AS
+        USEENDDAT,
         F006_CRUSERID AS CRUSERID
         FROM HANGIL.TB_F006_PATIENTCASE
         WHERE F006_DELYN = 'N'
@@ -26,7 +29,8 @@
     </select>
 
     <!-- 상세 -->
-    <select id="detailSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
+    <select id="detailSelect" parameterType="String"
+            resultType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         SELECT F006_KEY AS key,
                F006_TYPE        AS TYPE,
                F006_DIAGCD      AS DIAGCD,
@@ -50,18 +54,19 @@
 
     <!-- 저장 -->
     <insert id="insert" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
-        INSERT INTO HANGIL.TB_F006_PATIENTCASE (F006_KEY,
-                                                F006_TYPE,
-                                                F006_DIAGCD,
-                                                F006_SEX,
-                                                F006_BIRTH,
-                                                F006_PREYN,
-                                                F006_PAGTTY,
-                                                F006_SPECIAL,
-                                                F006_USESTRDAT,
-                                                F006_USEENDDAT,
-                                                F006_CRUSERID,
-                                                F006_CRUSERIP)
+        INSERT INTO HANGIL.TB_F006_PATIENTCASE
+        (F006_KEY,
+         F006_TYPE,
+         F006_DIAGCD,
+         F006_SEX,
+         F006_BIRTH,
+         F006_PREYN,
+         F006_PAGTTY,
+         F006_SPECIAL,
+         F006_USESTRDAT,
+         F006_USEENDDAT,
+         F006_CRUSERID,
+         F006_CRUSERIP)
         VALUES ((SELECT LPAD(NVL(MAX(F006_KEY), 0) + 1, 8, '0') FROM HANGIL.TB_F006_PATIENTCASE),
                 #{type},
                 #{diagCd},
@@ -90,7 +95,7 @@
     <!-- 삭제 -->
     <update id="delete" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         UPDATE HANGIL.TB_F006_PATIENTCASE
-        SET F006_DELYN     = 'Y',
+        SET F006_DELYN    = 'Y',
             F006_UPDTIME  = SYSDATE,
             F006_UPUSERID = #{upUserId},
             F006_UPUSERIP = #{upUserIp}
@@ -100,12 +105,12 @@
     <!-- 수정 -->
     <update id="update" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
         UPDATE HANGIL.TB_F006_PATIENTCASE
-        SET F006_SPECIAL =  #{specialNote},
+        SET F006_SPECIAL   = #{specialNote},
             F006_USESTRDAT = REPLACE(#{useStrDat}, '-', ''),
             F006_USEENDDAT = REPLACE(#{useEndDat}, '-', ''),
-            F006_UPDTIME  = SYSDATE,
-            F006_UPUSERID = #{upUserId},
-            F006_UPUSERIP = #{upUserIp}
+            F006_UPDTIME   = SYSDATE,
+            F006_UPUSERID  = #{upUserId},
+            F006_UPUSERIP  = #{upUserIp}
         WHERE F006_KEY = #{key}
     </update>
 

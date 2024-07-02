@@ -3,8 +3,30 @@
 
 <mapper namespace="com.hangileye.lifetouch.mapper.questionMain.queCase.CaseMapper">
 
+    <!-- 케이스 목록 -->
+    <select id="listSelect" resultType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel">
+        SELECT F006_KEY AS KEY,
+        F006_TYPE AS TYPE,
+        F006_DIAGCD AS DIAGCD,
+        F006_SEX AS SEX,
+        F006_BIRTH AS BIRTH,
+        F006_JOBTY AS JOBTY,
+        F006_PAGTTY AS PAGTTY,
+        F006_SPECIAL AS SPECIALNOTE,
+        SUBSTR(F006_USESTRDAT, 1, 4) || '-' || SUBSTR(F006_USESTRDAT, 5, 2) || '-' || SUBSTR(F006_USESTRDAT, 7, 2)    AS USESTRDAT,
+        SUBSTR(F006_USEENDDAT, 1, 4) || '-' || SUBSTR(F006_USEENDDAT, 5, 2) || '-' || SUBSTR(F006_USEENDDAT, 7, 2)    AS USEENDDAT,
+        F006_CRUSERID AS CRUSERID
+        FROM HANGIL.TB_F006_PATIENTCASE
+        WHERE F006_DELYN = 'N'
+        <if test="useDat != null and useDat != ''">
+            AND REPLACE(#{useDat}, '-') >= F006_USEENDDAT
+            AND F006_USESTRDAT >= REPLACE(#{useDat}, '-')
+        </if>
+        ORDER BY F006_KEY DESC
+    </select>
+
     <!-- 추가 된 질문 조회 -->
-    <select id="listSelect" parameterType="String"
+    <select id="okListSelect" parameterType="String"
             resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
         SELECT F007_KEY AS KEY,
                F007_CONTENT AS CONTENT,
@@ -16,7 +38,7 @@
     </select>
 
     <!-- 추가 할 질문 조회 -->
-    <select id="queListSelect" parameterType="String"
+    <select id="noListSelect" parameterType="String"
             resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
         SELECT F007_KEY AS KEY,
                F007_CONTENT AS CONTENT,
@@ -105,6 +127,16 @@
           AND F005_DELYN = 'N'
           AND F007_KEY = F005_QUEKEY
         ORDER BY SORT ASC
+    </select>
+
+    <!-- 질문 보기  -->
+    <select id="exampleListSelect" parameterType="String"
+            resultType="String">
+        SELECT
+            LISTAGG(LTRIM(F008_SORT, '0')  || '. ' || F008_CONTENT || ',  ') WITHIN GROUP (ORDER BY F008_SORT) FROM HANGIL.TB_F008_EXAMPLE
+        WHERE F008_QUEKEY = #{queKey}
+          AND F008_DELYN = 'N'
+        ORDER BY F008_SORT ASC
     </select>
 
 </mapper>

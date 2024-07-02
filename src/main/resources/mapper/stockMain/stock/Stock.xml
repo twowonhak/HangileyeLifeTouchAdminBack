@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.stockMain.stock.StockMapper">
+
+    <select id="codeListSelect" resultType="com.hangileye.lifetouch.model.stockMain.stock.CodeModel">
+        SELECT
+            D004_CODE AS CODENM,
+            D004_OPTION AS OPTIONNM
+        FROM HANGIL.TB_D004_CODE
+        WHERE D004_USEYN = 'Y'
+        ORDER BY D004_OPTION DESC
+    </select>
+
+    <select id="teamListSelect" resultType="com.hangileye.lifetouch.model.stockMain.stock.TeamModel">
+        SELECT
+            D003_KEY AS KEY,
+            D003_NAME AS NAME
+        FROM  HANGIL.TB_D003_TEAM
+        ORDER BY D003_KEY
+    </select>
+
+    <select id="assetListSelect" resultType="com.hangileye.lifetouch.model.stockMain.asset.AssetModel">
+        SELECT
+            D002_MAINKEY AS MAINKEY,
+            D002_MAINNM AS MAINNM,
+            D002_SUBKEY AS SUBKEY,
+            D002_SUBNM AS SUBNM
+        FROM HANGIL.TB_D002_ASSETCODE
+        ORDER BY D002_MAINKEY, D002_SUBKEY
+    </select>
+
+    <select id="listSelect" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel"
+            resultType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        SELECT
+        D001_ID AS KEY,
+        (SELECT
+            D002_MAINNM
+            FROM HANGIL.TB_D002_ASSETCODE
+            WHERE D002_MAINKEY = SUBSTR(D001_ASSCD,1,2)
+            GROUP BY D002_MAINNM)
+        || '_' ||
+        (SELECT
+            D002_SUBNM
+            FROM HANGIL.TB_D002_ASSETCODE
+            WHERE D002_MAINKEY = SUBSTR(D001_ASSCD,1,2)
+            AND D002_SUBKEY = SUBSTR(D001_ASSCD,3,2)) AS ASSNM,
+        DECODE(D001_BUIL, 'M', '본관', 'N', '신관') AS BUIL,
+        (SELECT D003_NAME FROM HANGIL.TB_D003_TEAM WHERE D001_TEAM
+         = D003_KEY) AS TEAM,
+        D001_FLOOR AS FLOOR,
+        D001_PLACE AS PLACE,
+        D001_USER AS USERNM,
+        (   SELECT
+            D004_OPTION
+            FROM HANGIL.TB_D004_CODE
+            WHERE D004_CODE = 'YEAR'
+            AND D004_OPTION = D001_YEAR) AS YEAR,
+        D001_IP AS IP,
+        (   SELECT
+            D004_OPTION
+            FROM HANGIL.TB_D004_CODE
+            WHERE D004_CODE = 'MS'
+            AND D004_OPTION = D001_MS)  AS MS,
+        (   SELECT
+            D004_OPTION
+            FROM HANGIL.TB_D004_CODE
+            WHERE D004_CODE = 'HWP'
+            AND D004_OPTION = D001_HWP) AS HWP
+        FROM HANGIL.TB_D001_STOCK
+        WHERE 1=1
+        <if test="assMainCd != null and assMainCd != ''">
+            AND SUBSTR(D001_ASSCD,1,2) = #{assMainCd}
+        </if>
+        <if test="assSubCd != null and assSubCd != ''">
+            AND SUBSTR(D001_ASSCD,3,2) = #{assSubCd}
+        </if>
+        <if test="buil != null and buil != ''">
+            AND D001_BUIL = #{buil}
+        </if>
+        <if test="floor != null and floor != ''">
+            AND D001_FLOOR = #{floor}
+        </if>
+        <if test="team != null and team != ''">
+            AND D001_TEAM = #{team}
+        </if>
+    ORDER BY D001_ID ASC
+    </select>
+
+    <insert id="insert" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        INSERT INTO HANGIL.TB_D001_STOCK
+        (D001_ID,
+         D001_ASSCD,
+         D001_BUIL,
+         D001_TEAM,
+         D001_FLOOR,
+         D001_PLACE,
+         D001_USER,
+         D001_YEAR,
+         D001_IP,
+         D001_MS,
+         D001_HWP)
+        VALUES ((SELECT LPAD(NVL(MAX(D001_ID), 0) + 1, 8, '0') FROM HANGIL.TB_D001_STOCK),
+                #{assMainCd}||#{assSubCd},
+                #{buil},
+                #{team},
+                #{floor},
+                #{place},
+                #{userNm},
+                #{year},
+                #{ip},
+                #{ms},
+                #{hwp})
+
+        <selectKey keyProperty="id" resultType="String" order="AFTER">
+            SELECT MAX(D001_ID) AS ID FROM HANGIL.TB_D001_STOCK
+        </selectKey>
+    </insert>
+
+    <select id="detailSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        SELECT
+            D001_ID         AS ID,
+            (SELECT
+                 D002_MAINNM
+             FROM HANGIL.TB_D002_ASSETCODE
+             WHERE D002_MAINKEY = SUBSTR(D001_ASSCD,1,2)
+             GROUP BY D002_MAINNM)
+                || '_' ||
+            (SELECT
+                 D002_SUBNM
+             FROM HANGIL.TB_D002_ASSETCODE
+             WHERE D002_MAINKEY = SUBSTR(D001_ASSCD,1,2)
+               AND D002_SUBKEY = SUBSTR(D001_ASSCD,3,2)) AS ASSNM,
+            D001_BUIL       AS BUIL,
+            D001_TEAM       AS TEAM,
+            D001_FLOOR      AS FLOOR,
+            D001_PLACE      AS PLACE,
+            D001_USER       AS USERNM,
+            (   SELECT
+                D004_OPTION
+                FROM HANGIL.TB_D004_CODE
+                WHERE D004_CODE = 'YEAR'
+                  AND D004_OPTION = D001_YEAR) AS YEAR,
+            D001_IP         AS IP,
+            (   SELECT
+                D004_OPTION
+                FROM HANGIL.TB_D004_CODE
+                WHERE D004_CODE = 'MS'
+                AND D004_OPTION = D001_MS)  AS MS,
+            (   SELECT
+                D004_OPTION
+                FROM HANGIL.TB_D004_CODE
+                WHERE D004_CODE = 'HWP'
+                AND D004_OPTION = D001_HWP) AS HWP,
+            D001_USEYN      AS USEYN,
+            D001_MEMO       AS MEMO
+        FROM HANGIL.TB_D001_STOCK
+        WHERE D001_ID = #{id}
+    </select>
+
+    <update id="update" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        UPDATE HANGIL.TB_D001_STOCK
+        SET
+        D001_BUIL = #{buil},
+        D001_TEAM = #{team},
+        D001_FLOOR = #{floor},
+        D001_PLACE = #{place},
+        D001_USER = #{userNm},
+        D001_IP = #{ip},
+        D001_YEAR = #{year},
+        D001_HWP = #{hwp},
+        D001_MS = #{ms},
+        D001_MEMO = #{memo},
+        D001_UPDTIME = SYSDATE
+        WHERE D001_ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        UPDATE HANGIL.TB_D001_STOCK
+        SET D001_MEMO    = #{memo},
+            D001_USEYN   = 'D',
+            D001_UPDTIME = SYSDATE
+        WHERE D001_ID = #{id}
+    </update>
+
+    <update id="clear" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        UPDATE HANGIL.TB_D001_STOCK
+        SET D001_BUIL    = '',
+            D001_TEAM    = '',
+            D001_FLOOR   = '',
+            D001_PLACE   = '',
+            D001_USER    = '',
+--             D001_YEAR    = '',
+            D001_IP      = '',
+            D001_MS      = '',
+            D001_HWP     = '',
+            D001_MEMO    = #{memo},
+            D001_USEYN   = 'N',
+            D001_UPDTIME = SYSDATE
+        WHERE D001_ID = #{id}
+    </update>
+
+    <update id="use" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        UPDATE HANGIL.TB_D001_STOCK
+        SET D001_BUIL    = #{buil},
+            D001_TEAM    = #{team},
+            D001_FLOOR   = #{floor},
+            D001_PLACE   = #{place},
+            D001_USER    = #{userNm},
+            D001_YEAR    = #{year},
+            D001_IP      = #{ip},
+            D001_MS      = #{ms},
+            D001_HWP     = #{hwp},
+            D001_MEMO    = #{memo},
+            D001_USEYN   = 'Y',
+            D001_UPDTIME = SYSDATE
+        WHERE D001_ID = #{id}
+    </update>
+
+</mapper>

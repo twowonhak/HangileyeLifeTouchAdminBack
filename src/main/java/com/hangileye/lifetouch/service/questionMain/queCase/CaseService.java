@@ -26,14 +26,34 @@ public class CaseService {
     }
 
     /*
+     * @Description : 케이스 목록
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> listSelect() {
+        ResponseData res = new ResponseData();
+        try {
+            res.setData(caseMapper.listSelect());
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            res.setSystem();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /*
      * @Description : 추가 된 질문 조회
      * */
     @Transactional
-    public ResponseEntity<ResponseData> listSelect(String queKey) {
+    public ResponseEntity<ResponseData> okListSelect(String queKey) {
         ResponseData res = new ResponseData();
         try {
-            List<QuestionCaseModel> list = caseMapper.listSelect(queKey);
-            res.setData(list);
+            List<QuestionCaseModel> arrList = caseMapper.okListSelect(queKey);
+            for (QuestionCaseModel list: arrList) {
+                list.setExampleArr(caseMapper.exampleListSelect(list.getKey()));
+            }
+            res.setData(arrList);
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
@@ -47,11 +67,14 @@ public class CaseService {
      * @Description : 추가 할 질문 조회
      * */
     @Transactional
-    public ResponseEntity<ResponseData> queListSelect(String queKey) {
+    public ResponseEntity<ResponseData> noListSelect(String queKey) {
         ResponseData res = new ResponseData();
         try {
-            List<QuestionCaseModel> list = caseMapper.queListSelect(queKey);
-            res.setData(list);
+            List<QuestionCaseModel> arrList = caseMapper.noListSelect(queKey);
+            for (QuestionCaseModel list: arrList) {
+                list.setExampleArr(caseMapper.exampleListSelect(list.getKey()));
+            }
+            res.setData(arrList);
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {

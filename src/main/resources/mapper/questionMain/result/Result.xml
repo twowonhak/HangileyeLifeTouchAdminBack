@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.queCase.CaseMapper">
+
+    <!-- 환자 케이스 정보에 저장된 질문 보기 -->
+    <select id="resultListSelect" parameterType="com.hangileye.lifetouch.model.questionMain.patient.PatientCaseModel" resultType="com.hangileye.lifetouch.model.questionMain.question.QuestionCaseModel">
+        SELECT
+            *
+FROM HANGIL.TB_
+    </select>
+
+
+</mapper>

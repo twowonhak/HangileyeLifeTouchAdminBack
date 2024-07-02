@@ -11,17 +11,22 @@ import java.util.List;
 @Mapper
 public interface CaseMapper {
 
+    List<PatientCaseModel> listSelect();
+
     String keySelect(PatientCaseModel patientCaseModel);
 
-    List<QuestionCaseModel> listSelect(String patKey);
+    List<QuestionCaseModel> okListSelect(String patKey);
 
     void insert(CaseModel caseModel);
 
-    List<QuestionCaseModel> queListSelect(String queKey);
+    List<QuestionCaseModel> noListSelect(String queKey);
 
     void delete(CaseModel caseModel);
 
     void sortUpdate(CaseModel caseModel);
 
     List<CaseModel> sortListSelect(String patKey);
+
+    String exampleListSelect(String queKey);
+
 }

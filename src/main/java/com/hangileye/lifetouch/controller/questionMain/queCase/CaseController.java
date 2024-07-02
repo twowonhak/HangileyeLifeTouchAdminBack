@@ -28,19 +28,27 @@ public class CaseController {
     }
 
     /*
-     * @Description : 등록 된 질문 조회
+     * @Description : 케이스 목록
      * */
     @RequestMapping("listSelectApi")
-    public ResponseData listSelect(@RequestBody PatientCaseModel patientCaseModel) {
-        return caseService.listSelect(patientCaseModel.getKey()).getBody();
+    public ResponseData listSelect() {
+        return caseService.listSelect().getBody();
+    }
+
+    /*
+     * @Description : 등록 된 질문 조회
+     * */
+    @RequestMapping("okListSelectApi")
+    public ResponseData okListSelect(@RequestBody PatientCaseModel patientCaseModel) {
+        return caseService.okListSelect(patientCaseModel.getKey()).getBody();
     }
 
     /*
      * @Description : 추가 할 질문 조회
      * */
-    @RequestMapping("queListSelectApi")
-    public ResponseData queListSelect(@RequestBody PatientCaseModel patientCaseModel) {
-        return caseService.queListSelect(patientCaseModel.getKey()).getBody();
+    @RequestMapping("noListSelectApi")
+    public ResponseData noListSelect(@RequestBody PatientCaseModel patientCaseModel) {
+        return caseService.noListSelect(patientCaseModel.getKey()).getBody();
     }
 
     /*
