@@ -1,9 +1,12 @@
 package com.hangileye.lifetouch.service;
 
+import com.hangileye.lifetouch.mapper.ErrorMapper;
 import com.hangileye.lifetouch.mapper.LoginMapper;
+import com.hangileye.lifetouch.model.ErrorModel;
 import com.hangileye.lifetouch.model.LoginModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import com.hangileye.lifetouch.utill.CookieManager;
+import com.hangileye.lifetouch.utill.ErrorHistory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,23 +14,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Service
-public class LoginService {
+public class LoginService extends ErrorHistory {
 
     private final LoginMapper loginMapper;
+    private final ErrorMapper errorMapper;
 
-    public LoginService(LoginMapper loginMapper) {
+    public LoginService(LoginMapper loginMapper, ErrorMapper errorMapper) {
         this.loginMapper = loginMapper;
+        this.errorMapper = errorMapper;
     }
 
     /*
      * @Description : 관리자 로그인
      * */
     @Transactional
-    public ResponseEntity<ResponseData> login(HttpServletResponse response, LoginModel loginModel) {
+    public ResponseEntity<ResponseData> login(HttpServletResponse response, HttpServletRequest request, LoginModel loginModel) {
         ResponseData res = new ResponseData();
         try {
             LoginModel model = loginMapper.login(loginModel);
@@ -48,9 +54,7 @@ public class LoginService {
             }
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
-            log.error(String.valueOf(e));
-            res.setSystem();
-            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            return errorHistory(request, res, errorMapper, e);
         }
     }
 }

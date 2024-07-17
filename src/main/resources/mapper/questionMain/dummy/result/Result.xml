@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.dummy.result.ResultMapper">
+
+    <!-- 환자 케이스 정보에 저장된 질문 보기 -->
+    <select id="resultListSelect" parameterType="com.hangileye.lifetouch.model.questionMain.dummy.patient.PatientCaseModel" resultType="com.hangileye.lifetouch.model.questionMain.dummy.question.DummyQuestionCaseModel">
+        SELECT
+            F007_KEY AS KEY,
+            F007_CONTENT AS CONTENT,
+            F007_SORT AS SORT
+        FROM HANGIL.TB_F007_QUESTIONCASE
+        WHERE F007_KEY IN (
+                        SELECT
+                            F005_QUEKEY
+                        FROM HANGIL.TB_F005_CASE
+                        WHERE F005_PATKEY IN (
+                                            SELECT DISTINCT F006_KEY
+                                            FROM HANGIL.TB_F006_PATIENTCASE
+                                            WHERE
+                                                   INSTR( F006_TYPE, #{type} ) > 0
+                                                OR INSTR( F006_DIAGCD, #{diagCd} ) > 0
+                                                OR INSTR( F006_SEX, #{sex} ) > 0
+                                                OR INSTR( F006_BIRTH, #{birth} ) > 0
+                                                OR INSTR( F006_PREYN, #{preYn} ) > 0
+                                                OR INSTR( F006_PAGTTY, #{pagtTy} ) > 0
+                                                OR INSTR( F006_SPECIAL, #{specialNote} ) > 0
+                                            AND TO_CHAR(SYSDATE, 'YYYYMMDD') >= F006_USESTRDAT
+                                            AND F006_USEENDDAT >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                                            AND F006_DELYN = 'N'
+                                            )
+                        )
+        AND TO_CHAR(SYSDATE, 'YYYYMMDD') >= F007_USESTRDAT
+        AND F007_USEENDDAT >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+        ORDER BY F007_SORT
+    </select>
+
+    <select id="exampleListSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.dummy.question.DummyExampleModel">
+        SELECT F008_KEY AS KEY,
+               F008_TYPE AS TYPE,
+               F008_CONTENT AS  CONTENT,
+               REPLACE(F008_SORT, '0','') AS SORT
+        FROM HANGIL.TB_F008_EXAMPLE
+        WHERE F008_QUEKEY = #{key}
+          AND F008_DELYN = 'N'
+        ORDER BY F008_SORT
+    </select>
+
+
+</mapper>

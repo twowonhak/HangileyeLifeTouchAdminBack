@@ -9,7 +9,7 @@
             D004_OPTION AS OPTIONNM
         FROM HANGIL.TB_D004_CODE
         WHERE D004_USEYN = 'Y'
-        ORDER BY D004_OPTION DESC
+        ORDER BY D004_OPTION ASC
     </select>
 
     <select id="teamListSelect" resultType="com.hangileye.lifetouch.model.stockMain.stock.TeamModel">
@@ -84,7 +84,11 @@
         <if test="team != null and team != ''">
             AND D001_TEAM = #{team}
         </if>
-    ORDER BY D001_ID ASC
+        <if test="useYn != null and useYn != ''">
+            AND D001_USEYN = #{useYn}
+        </if>
+
+    ORDER BY D001_ID DESC
     </select>
 
     <insert id="insert" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
@@ -177,8 +181,11 @@
 
     <update id="delete" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
         UPDATE HANGIL.TB_D001_STOCK
-        SET D001_MEMO    = #{memo},
+        SET
             D001_USEYN   = 'D',
+        <if test="memo != null and memo != ''">
+            D001_MEMO    = #{memo},
+        </if>
             D001_UPDTIME = SYSDATE
         WHERE D001_ID = #{id}
     </update>
@@ -194,7 +201,9 @@
             D001_IP      = '',
             D001_MS      = '',
             D001_HWP     = '',
-            D001_MEMO    = #{memo},
+            <if test="memo != null and memo != ''">
+                D001_MEMO    = #{memo},
+            </if>
             D001_USEYN   = 'N',
             D001_UPDTIME = SYSDATE
         WHERE D001_ID = #{id}

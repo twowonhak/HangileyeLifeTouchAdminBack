@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.QueCodeMapper">
+
+    <select id="lrgCtgListSelect" resultType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        SELECT DISTINCT Q000_LRGCTGCD AS LRGCTGCD,
+                        Q000_LRGCTGNM AS LRGCTGNM,
+                        Q000_LRGCTGSORT AS LRGCTGSORT
+        FROM HANGIL.TB_Q000_QUECODE
+        WHERE Q000_LRGCTGUSEYN = 'Y'
+        ORDER BY Q000_LRGCTGSORT ASC
+    </select>
+
+    <select id="midCtgListSelect" resultType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        SELECT DISTINCT Q000_LRGCTGCD AS LRGCTGCD,
+                        Q000_MIDCTGCD AS MIDCTGCD,
+                        Q000_MIDCTGNM AS MIDCTGNM,
+                        Q000_MIDCTGSORT AS MIDCTGSORT
+        FROM HANGIL.TB_Q000_QUECODE
+        WHERE Q000_MIDCTGUSEYN = 'Y'
+        ORDER BY Q000_MIDCTGSORT ASC
+    </select>
+
+    <insert id="lrgCtgInsert" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        INSERT INTO HANGIL.TB_Q000_QUECODE (Q000_LRGCTGCD,
+                                            Q000_LRGCTGNM,
+                                            Q000_LRGCTGSORT,
+                                            Q000_MIDCTGSORT,
+                                            Q000_CRUSERID,
+                                            Q000_CRUSERIP)
+        VALUES ((SELECT LPAD(NVL(MAX(Q000_LRGCTGCD), 0) + 1, 2, '0') FROM HANGIL.TB_Q000_QUECODE),
+                #{lrgCtgNm},
+                (SELECT LPAD(NVL(MAX(Q000_LRGCTGSORT), 0) + 1, 2, '0') FROM HANGIL.TB_Q000_QUECODE),
+                '01',
+                #{crUserId},
+                #{crUserIp})
+    </insert>
+
+    <insert id="migCtgInsert" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        INSERT INTO HANGIL.TB_Q000_QUECODE (Q000_LRGCTGCD,
+                                            Q000_LRGCTGNM,
+                                            Q000_LRGCTGSORT,
+                                            Q000_MIDCTGCD,
+                                            Q000_MIDCTGNM,
+                                            Q000_MIDCTGSORT,
+                                            Q000_CRUSERID,
+                                            Q000_CRUSERIP)
+        VALUES (#{lrgCtgCd},
+                #{lrgCtgNm},
+                #{lrgCtgSort},
+                (SELECT LPAD(NVL(MAX(Q000_MIDCTGCD), 0) + 1, 2, '0') FROM HANGIL.TB_Q000_QUECODE WHERE Q000_LRGCTGCD = #{lrgCtgCd}),
+                #{midCtgNm},
+                (SELECT LPAD(NVL(MAX(Q000_MIDCTGSORT), 0) + 1, 2, '0') FROM HANGIL.TB_Q000_QUECODE WHERE Q000_LRGCTGCD = #{lrgCtgCd}),
+                #{crUserId},
+                #{crUserIp})
+    </insert>
+
+    <update id="lrgCtgUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        UPDATE HANGIL.TB_Q000_QUECODE
+        SET Q000_LRGCTGNM = #{lrgCtgNm},
+            Q000_UPDTIME  = SYSDATE,
+            Q000_UPUSERID = #{upUserId},
+            Q000_UPUSERIP = #{upUserIp}
+        WHERE Q000_LRGCTGCD = #{ltgCtgCd}
+    </update>
+
+    <update id="midCtgUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        UPDATE HANGIL.TB_Q000_QUECODE
+        SET Q000_MIDCTGNM = #{midCtgNm},
+            Q000_UPDTIME  = SYSDATE,
+            Q000_UPUSERID = #{upUserId},
+            Q000_UPUSERIP = #{upUserIp}
+        WHERE Q000_MIDCTGCD = #{midCtgCd}
+    </update>
+
+    <update id="lrgCtgDelete" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        UPDATE HANGIL.TB_Q000_QUECODE
+        SET Q000_LRGCTGUSEYN = 'N',
+            Q000_UPDTIME  = SYSDATE,
+            Q000_UPUSERID = #{upUserId},
+            Q000_UPUSERIP = #{upUserIp}
+        WHERE Q000_LRGCTGCD = #{ltgCtgCd}
+    </update>
+
+    <update id="midCtgDelete" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        UPDATE HANGIL.TB_Q000_QUECODE
+        SET Q000_MIDCTGUSEYN = 'N',
+            Q000_UPDTIME  = SYSDATE,
+            Q000_UPUSERID = #{upUserId},
+            Q000_UPUSERIP = #{upUserIp}
+        WHERE Q000_MIDCTGCD = #{midCtgCd}
+    </update>
+
+    <update id="lrgCtgSortUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        UPDATE HANGIL.TB_Q000_QUECODE
+        SET Q000_LRGCTGSORT = LPAD(#{lrgCtgSort}, 2, 0),
+            Q000_UPDTIME  = SYSDATE,
+            Q000_UPUSERID = #{upUserId},
+            Q000_UPUSERIP = #{upUserIp}
+        WHERE Q000_LRGCTGCD = #{lrgCtgCd}
+    </update>
+
+    <update id="midCtgSortUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        UPDATE HANGIL.TB_Q000_QUECODE
+        SET Q000_MIDCTGSORT = LPAD(#{midCtgSort}, 2, 0),
+            Q000_UPDTIME  = SYSDATE,
+            Q000_UPUSERID = #{upUserId},
+            Q000_UPUSERIP = #{upUserIp}
+        WHERE Q000_MIDCTGCD = #{midCtgCd}
+    </update>
+
+
+</mapper>

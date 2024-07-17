@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.ErrorMapper">
+
+    <select id="insertErrorHis" statementType="CALLABLE" parameterType="com.hangileye.lifetouch.model.ErrorModel">
+        {
+            CALL HANGIL.INSERT_ERROR_HISTORY(
+                #{api},
+                #{error},
+                #{id},
+                #{ip}
+            )
+        }
+    </select>
+
+</mapper>

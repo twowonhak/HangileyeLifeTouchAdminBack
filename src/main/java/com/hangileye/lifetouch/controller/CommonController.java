@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @RestController
 @ResponseBody
@@ -26,24 +28,24 @@ public class CommonController {
      * @Description : 과 리스트 조회
      * */
     @RequestMapping("/diagListSelect")
-    public ResponseData diagListSelect() {
-        return commonService.diagListSelect().getBody();
+    public ResponseData diagListSelect(HttpServletRequest request) {
+        return commonService.diagListSelect(request).getBody();
     }
 
     /*
      * @Description : 환자 조회
      * */
     @RequestMapping("/chartNoSelectApi")
-    public ResponseData chartNoSelect(@RequestBody PatInfoModel patInfoModel) {
-        return commonService.chartNoSelect(patInfoModel.getChartNo()).getBody();
+    public ResponseData chartNoSelect(HttpServletRequest request, @RequestBody PatInfoModel patInfoModel) {
+        return commonService.chartNoSelect(request, patInfoModel.getChartNo()).getBody();
     }
 
     /*
      * @Description : 예약 조회
      * */
     @RequestMapping("/appointmentListSelectApi")
-    public ResponseData appointmentListSelect(@RequestBody PatInfoModel patInfoModel) {
-        return commonService.appointmentListSelect(patInfoModel.getChartNo()).getBody();
+    public ResponseData appointmentListSelect(HttpServletRequest request, @RequestBody PatInfoModel patInfoModel) {
+        return commonService.appointmentListSelect(request, patInfoModel.getChartNo()).getBody();
     }
 
 }

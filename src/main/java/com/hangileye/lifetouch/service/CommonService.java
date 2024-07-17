@@ -1,8 +1,10 @@
 package com.hangileye.lifetouch.service;
 
 import com.hangileye.lifetouch.mapper.CommonMapper;
+import com.hangileye.lifetouch.mapper.ErrorMapper;
 import com.hangileye.lifetouch.model.common.PatInfoModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
+import com.hangileye.lifetouch.utill.ErrorHistory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,30 +12,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @Service
-public class CommonService {
+public class CommonService extends ErrorHistory {
 
     private final CommonMapper commonMapper;
+    private final ErrorMapper errorMapper;
 
-    public CommonService(CommonMapper commonMapper) {
+    public CommonService(CommonMapper commonMapper, ErrorMapper errorMapper) {
         this.commonMapper = commonMapper;
+        this.errorMapper = errorMapper;
     }
 
     /*
      * @Description : 과 리스트 조회
      * */
     @Transactional
-    public ResponseEntity<ResponseData> diagListSelect() {
+    public ResponseEntity<ResponseData> diagListSelect(HttpServletRequest request) {
         ResponseData res = new ResponseData();
         try {
             res.setData(commonMapper.diagListSelect());
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
-            log.error(String.valueOf(e));
-            res.setSystem();
-            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            return errorHistory(request, res, errorMapper, e);
         }
     }
 
@@ -41,7 +45,7 @@ public class CommonService {
      * @Description : 환자 정보
      * */
     @Transactional
-    public ResponseEntity<ResponseData> chartNoSelect(String chartNo) {
+    public ResponseEntity<ResponseData> chartNoSelect(HttpServletRequest request, String chartNo) {
         ResponseData res = new ResponseData();
         try {
 
@@ -56,9 +60,7 @@ public class CommonService {
 
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
-            log.error(String.valueOf(e));
-            res.setSystem();
-            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            return errorHistory(request, res, errorMapper, e);
         }
     }
 
@@ -66,16 +68,14 @@ public class CommonService {
      * @Description : 예약
      * */
     @Transactional
-    public ResponseEntity<ResponseData> appointmentListSelect(String chartNo) {
+    public ResponseEntity<ResponseData> appointmentListSelect(HttpServletRequest request, String chartNo) {
         ResponseData res = new ResponseData();
         try {
             res.setData(commonMapper.appointmentListSelect(chartNo));
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
-            log.error(String.valueOf(e));
-            res.setSystem();
-            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            return errorHistory(request, res, errorMapper, e);
         }
     }
 }

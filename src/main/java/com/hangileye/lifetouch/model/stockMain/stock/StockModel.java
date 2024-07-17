@@ -1,6 +1,9 @@
 package com.hangileye.lifetouch.model.stockMain.stock;
 
+import com.hangileye.lifetouch.model.common.BaseModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  * TB : TB_D001_STOCK
@@ -9,7 +12,9 @@ import lombok.Data;
 
 
 @Data
-public class StockModel {
+@NoArgsConstructor
+@AllArgsConstructor
+public class StockModel extends BaseModel {
     private String  id;                 // 고유번호 (8)
     private String  key;                // 고유번호 (8)
     private String  assCd;              // 자산분류코드 (4)

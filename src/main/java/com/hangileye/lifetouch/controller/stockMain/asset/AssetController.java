@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @RestController
 @ResponseBody
@@ -26,15 +28,15 @@ public class AssetController {
      * @Description : 목록 조회
      * */
     @RequestMapping("/listSelectApi")
-    public ResponseData listSelect() {
-        return assetService.listSelect().getBody();
+    public ResponseData listSelect(HttpServletRequest request) {
+        return assetService.listSelect(request).getBody();
     }
 
     /*
      * @Description : 저장
      * */
     @RequestMapping("insertApi")
-    public ResponseData insert(@RequestBody AssetModel assetModel) {
-        return assetService.insert(assetModel).getBody();
+    public ResponseData insert(HttpServletRequest request, @RequestBody AssetModel assetModel) {
+        return assetService.insert(request, assetModel).getBody();
     }
 }

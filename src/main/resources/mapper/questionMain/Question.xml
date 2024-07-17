@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.question.QuestionMapper">
+
+    <select id="questionListSelect" parameterType="com.hangileye.lifetouch.model.questionMain.QuestionModel" resultType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        SELECT Q001_KEY AS KEY,
+               (SELECT Q000_LRGCTGNM FROM HANGIL.TB_Q000_QUECODE WHERE Q000_LRGCTGCD = Q001_LRGCTGCD) AS LRGCTGNM,
+               (SELECT Q000_MIDCTGNM FROM HANGIL.TB_Q000_QUECODE WHERE Q001_MIDCTGCD = Q001_MIDCTGCD) AS MIDCTGNM,
+               Q001_QUETXT AS QUETXT,
+               SUBSTR(Q001_USESTRDAT, 1, 4) || '-' || SUBSTR(Q001_USESTRDAT, 5, 2) || '-' || SUBSTR(Q001_USESTRDAT, 7, 2) AS USESTRDAT,
+               SUBSTR(Q001_USEENDDAT, 1, 4) || '-' || SUBSTR(Q001_USEENDDAT, 5, 2) || '-' || SUBSTR(Q001_USEENDDAT, 7, 2) AS USEENDDAT
+        FROM HANGIL.TB_Q001_QUESTION
+        WHERE Q001_USEYN = 'Y'
+          AND Q001_LRGCTGCD = #{lrgCtgCd}
+          AND Q001_MIDCTGCD = #{midCtgCd}
+          AND EXISTS (SELECT NULL FROM HANGIL.TB_Q000_QUECODE WHERE Q000_LRGCTGCD = Q001_LRGCTGCD AND Q000_LRGCTGUSEYN = 'Y')
+          AND EXISTS (SELECT NULL FROM HANGIL.TB_Q000_QUECODE WHERE Q001_MIDCTGCD = Q001_MIDCTGCD AND Q000_MIDCTGUSEYN = 'Y')
+        <choose>
+            <when test="useYn == 'Y'.toString()">
+                AND Q001_USEENDDAT >= TO_CHAR(SYSDATE,'YYYYMMDD')
+            </when>
+            <when test="useYn == 'N'.toString()">
+                AND TO_CHAR(SYSDATE,'YYYYMMDD') >= Q001_USEENDDAT
+            </when>
+        </choose>
+        ORDER BY Q001_SORT ASC
+    </select>
+
+    <select id="questionSelect" parameterType="com.hangileye.lifetouch.model.questionMain.QuestionModel" resultType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        SELECT Q001_KEY AS KEY,
+               Q001_LRGCTGCD AS LRGCTGCD,
+               (SELECT Q000_LRGCTGNM FROM HANGIL.TB_Q000_QUECODE WHERE Q000_LRGCTGCD = Q001_LRGCTGCD) AS LRGCTGNM,
+               Q001_MIDCTGCD AS MIDCTGCD,
+               (SELECT Q000_MIDCTGNM FROM HANGIL.TB_Q000_QUECODE WHERE Q001_MIDCTGCD = Q001_MIDCTGCD) AS MIDCTGNM,
+               Q001_QUETXT AS QUETXT,
+               SUBSTR(Q001_USESTRDAT, 1, 4) || '-' || SUBSTR(Q001_USESTRDAT, 5, 2) || '-' || SUBSTR(Q001_USESTRDAT, 7, 2) AS USESTRDAT,
+               SUBSTR(Q001_USEENDDAT, 1, 4) || '-' || SUBSTR(Q001_USEENDDAT, 5, 2) || '-' || SUBSTR(Q001_USEENDDAT, 7, 2) AS USEENDDAT
+        FROM HANGIL.TB_Q001_QUESTION
+        WHERE Q001_KEY = #{key}
+    </select>
+
+    <insert id="questionInsert" parameterType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        INSERT INTO HANGIL.TB_Q001_QUESTION(Q001_KEY,
+                                            Q001_LRGCTGCD,
+                                            Q001_MIDCTGCD,
+                                            Q001_QUETXT,
+                                            Q001_USESTRDAT,
+                                            Q001_USEENDDAT,
+                                            Q001_SORTM,
+                                            Q001_CRUSERID,
+                                            Q001_CRUSERIP)
+        VALUES ((SELECT LPAD(NVL(MAX(Q001_KEY), 0) + 1, 2, '0') FROM HANGIL.TB_Q001_QUESTION),
+                #{lrgCtgCd},
+                #{midCtgCd},
+                #{queTxt},
+                REPLACE(#{useStrDat}, '-'),
+                REPLACE(#{useEndDat}, '-'),
+                (SELECT LPAD(NVL(MAX(Q001_SORTM), 0) + 1, 2, '0') FROM HANGIL.TB_Q001_QUESTION WHERE Q001_LRGCTGCD = #{lrgCtgCd} AND Q001_MIDCTGCD = #{midCtgCd}),
+                #{crUserId},
+                #{crUserIp})
+    </insert>
+
+    <update id="questionUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        UPDATE HANGIL.TB_Q001_QUESTION
+           SET Q001_LRGCTGCD = #{lrgCtgCd},
+               Q001_MIDCTGCD = #{midCtgCd},
+               Q001_QUETXT   = #{queTxt},
+               Q001_USESTRDAT = REPLACE(#{useStrDat}, '-'),
+               Q001_USEENDDAT = REPLACE(#{useEndDat}, '-'),
+               Q001_UPDTIME  = SYSDATE,
+               Q001_UPUSERID = #{upUserId},
+               Q001_UPUSERIP = #{upUserIp}
+        WHERE Q001_KEY = #{key}
+    </update>
+
+    <update id="questionDelete" parameterType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        UPDATE HANGIL.TB_Q001_QUESTION
+        SET Q001_USEYN = 'N',
+            Q001_UPDTIME  = SYSDATE,
+            Q001_UPUSERID = #{upUserId},
+            Q001_UPUSERIP = #{upUserIp}
+        WHERE Q001_KEY = #{key}
+    </update>
+
+    <update id="questionSortUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        UPDATE HANGIL.TB_Q000_QUECODE
+        SET Q001_SORT = LPAD(#{sort}, 2, 0),
+            Q001_UPDTIME  = SYSDATE,
+            Q001_UPUSERID = #{upUserId},
+            Q001_UPUSERIP = #{upUserIp}
+        WHERE Q001_KEY = #{key}
+    </update>
+
+
+
+</mapper>

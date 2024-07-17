@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.question.ExampleMapper">
+
+    <select id="exampleListSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.ExampleModel" >
+        SELECT Q002_KEY AS KEY,
+               DECODE(Q002_TYPE, 'C', '체크박스', 'T','텍스트') AS TYPE,
+               Q002_EXATXT AS EXATXT
+        FROM HANGIL.TB_Q002_EXAMPLE
+        WHERE Q002_QUEKEY = #{queKey}
+          AND Q002_USEYN = 'Y'
+        ORDER BY Q002_SORT ASC
+    </select>
+
+    <select id="exampleSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.ExampleModel">
+        SELECT Q002_KEY AS KEY,
+               DECODE(Q002_TYPE, 'C', '체크박스', 'T','텍스트') AS TYPE,
+               Q002_EXATXT AS EXATXT
+        FROM HANGIL.TB_Q002_EXAMPLE
+        WHERE Q002_KEY = #{key}
+    </select>
+
+    <insert id="exampleInsert" parameterType="com.hangileye.lifetouch.model.questionMain.ExampleModel">
+        INSERT INTO HANIGL.TB_Q002_EXAMPLE  (Q002_KEY,
+                                             Q002_QUEKEY,
+                                             Q002_TYPE,
+                                             Q002_SORT,
+                                             Q002_EXATXT,
+                                             Q002_CRUSERID,
+                                             Q002_CRISERIP)
+            VALUES ((SELECT LPAD(NVL(MAX(Q002_KEY),0) + 1, 4, '0') FROM HANGIL.TB_Q002_EXAMPLE),
+                    #{queKey},
+                    #{type},
+                    (SELECT LPAD(NVL(MAX(Q002_SORT),0) + 1, 2, '0') FROM HANGIL.TB_Q002_EXAMPLE),
+                    #{exaTxt},
+                    #{crUserId},
+                    #{crUserIp})
+    </insert>
+
+    <update id="exampleUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.ExampleModel">
+        UPDATE HANGIL.TB_Q002_EXAMPLE
+        SET Q002_EXATXT   = #{exaTxt},
+            Q002_UPDTIME  = #{upDtime},
+            Q002_UPUSERID = #{upUserId}
+        WHERE Q002_KEY = #{key}
+    </update>
+
+    <update id="exampleDelete" parameterType="com.hangileye.lifetouch.model.questionMain.ExampleModel">
+        UPDATE HANGIL.TB_Q002_EXAMPLE
+        SET Q002_USEYN    = 'N',
+            Q002_UPDTIME  = #{upDtime},
+            Q002_UPUSERID = #{upUserId}
+        WHERE Q002_KEY = #{key}
+    </update>
+
+</mapper>
