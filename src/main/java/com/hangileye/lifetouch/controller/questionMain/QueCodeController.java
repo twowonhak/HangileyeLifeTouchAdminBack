@@ -31,6 +31,16 @@ public class QueCodeController {
         return queCodeService.ctgListSelect(request, queCodeModel).getBody();
     }
 
+    @RequestMapping("/lrgCtgDetailSelectApi")
+    public ResponseData lrgCtgDetailSelect(HttpServletRequest request, @RequestBody QueCodeModel queCodeModel) {
+        return queCodeService.lrgCtgDetailSelect(request, queCodeModel).getBody();
+    }
+
+    @RequestMapping("/midCtgDetailSelectApi")
+    public ResponseData midCtgDetailSelect(HttpServletRequest request, @RequestBody QueCodeModel queCodeModel) {
+        return queCodeService.midCtgDetailSelect(request, queCodeModel).getBody();
+    }
+
     @RequestMapping("/lrgCtgInsertApi")
     public ResponseData lrgCtgInsert(HttpServletRequest request, @RequestBody QueCodeModel queCodeModel) {
         queCodeModel.setCrUserId(CookieManager.getCookie(request, "ID"));
@@ -38,11 +48,11 @@ public class QueCodeController {
         return queCodeService.lrgCtgInsert(request, queCodeModel).getBody();
     }
 
-    @RequestMapping("/migCtgInsertApi")
-    public ResponseData migCtgInsert(HttpServletRequest request, @RequestBody QueCodeModel queCodeModel) {
+    @RequestMapping("/midCtgInsertApi")
+    public ResponseData midCtgInsert(HttpServletRequest request, @RequestBody QueCodeModel queCodeModel) {
         queCodeModel.setCrUserId(CookieManager.getCookie(request, "ID"));
         queCodeModel.setCrUserIp(InetAddressInfo.getClientIP());
-        return queCodeService.migCtgInsert(request, queCodeModel).getBody();
+        return queCodeService.midCtgInsert(request, queCodeModel).getBody();
     }
 
     @RequestMapping("/lrgCtgUpdateApi")

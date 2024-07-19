@@ -54,4 +54,13 @@
         WHERE Q002_KEY = #{key}
     </update>
 
+    <update id="exampleSortUpdate" parameterType="com.hangileye.lifetouch.model.questionMain.ExampleModel">
+        UPDATE HANGIL.TB_Q002_EXAMPLE
+        SET Q002_SORT = LPAD(#{sort}, 2, 0),
+            Q002_UPDTIME  = SYSDATE,
+            Q002_UPUSERID = #{upUserId},
+            Q002_UPUSERIP = #{upUserIp}
+        WHERE Q002_KEY = #{key}
+    </update>
+
 </mapper>

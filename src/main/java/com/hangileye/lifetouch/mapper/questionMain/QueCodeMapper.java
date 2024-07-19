@@ -10,11 +10,11 @@ public interface QueCodeMapper {
 
     List<QueCodeModel> lrgCtgListSelect();
 
-    List<QueCodeModel> midCtgListSelect();
+    List<QueCodeModel> midCtgListSelect(String lrgCtgCd);
 
     void lrgCtgInsert(QueCodeModel queCodeModel);
 
-    void migCtgInsert(QueCodeModel queCodeModel);
+    void midCtgInsert(QueCodeModel queCodeModel);
 
     void lrgCtgUpdate(QueCodeModel queCodeModel);
 
@@ -27,4 +27,8 @@ public interface QueCodeMapper {
     void lrgCtgSortUpdate(QueCodeModel queCodeModel);
 
     void midCtgSortUpdate(QueCodeModel queCodeModel);
+
+    QueCodeModel lrgCtgDetailSelect(String lrgCtgCd);
+
+    QueCodeModel midCtgDetailSelect(QueCodeModel queCodeModel);
 }

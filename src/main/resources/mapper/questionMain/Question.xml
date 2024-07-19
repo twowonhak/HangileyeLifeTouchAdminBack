@@ -92,6 +92,4 @@
         WHERE Q001_KEY = #{key}
     </update>
 
-
-
 </mapper>

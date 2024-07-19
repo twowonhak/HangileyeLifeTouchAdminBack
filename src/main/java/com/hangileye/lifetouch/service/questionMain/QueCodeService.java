@@ -33,8 +33,30 @@ public class QueCodeService extends ErrorHistory {
         try {
             Map<Object, List<QueCodeModel>> map = new HashMap<>();
             map.put("lagCtg", queCodeMapper.lrgCtgListSelect());
-            map.put("midCtg", queCodeMapper.midCtgListSelect());
+            map.put("midCtg", queCodeMapper.midCtgListSelect(queCodeModel.getLrgCtgCd()));
             res.setData(map);
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHistory(request, res, errorMapper, e);
+        }
+    }
+
+    public ResponseEntity<ResponseData> lrgCtgDetailSelect(HttpServletRequest request, QueCodeModel queCodeModel) {
+        ResponseData res = new ResponseData();
+        try {
+            res.setData(queCodeMapper.lrgCtgDetailSelect(queCodeModel.getLrgCtgCd()));
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHistory(request, res, errorMapper, e);
+        }
+    }
+
+    public ResponseEntity<ResponseData> midCtgDetailSelect(HttpServletRequest request, QueCodeModel queCodeModel) {
+        ResponseData res = new ResponseData();
+        try {
+            res.setData(queCodeMapper.midCtgDetailSelect(queCodeModel));
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {
@@ -53,10 +75,10 @@ public class QueCodeService extends ErrorHistory {
         }
     }
 
-    public ResponseEntity<ResponseData> migCtgInsert(HttpServletRequest request, QueCodeModel queCodeModel) {
+    public ResponseEntity<ResponseData> midCtgInsert(HttpServletRequest request, QueCodeModel queCodeModel) {
         ResponseData res = new ResponseData();
         try {
-            queCodeMapper.migCtgInsert(queCodeModel);
+            queCodeMapper.midCtgInsert(queCodeModel);
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
         } catch (Exception e) {

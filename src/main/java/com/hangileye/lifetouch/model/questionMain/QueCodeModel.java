@@ -13,6 +13,7 @@ public class QueCodeModel {
     private String key;
     private String lrgCtgCd;
     private String lrgCtgNm;
+    private String sort;
     private String lrgCtgSort;
     private String lrgCtgUseYn;
 
