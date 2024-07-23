@@ -1,5 +1,6 @@
 package com.hangileye.lifetouch.controller.questionMain;
 
+import com.hangileye.lifetouch.model.questionMain.QueCodeModel;
 import com.hangileye.lifetouch.model.questionMain.QuestionModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import com.hangileye.lifetouch.service.questionMain.QuestionService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,6 +26,14 @@ public class QuestionController {
 
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
+    }
+
+    /*
+     * @Description : 목록 조회
+     * */
+    @RequestMapping("/codeListSelectApi")
+    public ResponseData codeListSelect(HttpServletRequest request) {
+        return questionService.codeListSelect(request).getBody();
     }
 
     /*
@@ -70,6 +80,15 @@ public class QuestionController {
         questionModel.setUpUserId(CookieManager.getCookie(request, "ID"));
         questionModel.setUpUserIp(InetAddressInfo.getClientIP());
         return questionService.update(request, questionModel).getBody();
+    }
+
+    @RequestMapping("/sortUpdateApi")
+    public ResponseData sortUpdate(HttpServletRequest request, @RequestBody List<QuestionModel> questionModelList) {
+        for (QuestionModel questionModel : questionModelList) {
+            questionModel.setUpUserId(CookieManager.getCookie(request, "ID"));
+            questionModel.setUpUserIp(InetAddressInfo.getClientIP());
+        }
+        return questionService.sortUpdate(request, questionModelList).getBody();
     }
 
 

@@ -31,7 +31,7 @@ public class ExampleController {
      * */
     @RequestMapping("/listSelectApi")
     public ResponseData listSelect(HttpServletRequest request, @RequestBody ExampleModel exampleModel) {
-        return exampleService.listSelect(request, exampleModel.getKey()).getBody();
+        return exampleService.listSelect(request, exampleModel.getQueKey()).getBody();
     }
 
     /*
@@ -83,7 +83,4 @@ public class ExampleController {
         }
         return exampleService.sortUpdate(request, exampleModelList).getBody();
     }
-
-
-
 }

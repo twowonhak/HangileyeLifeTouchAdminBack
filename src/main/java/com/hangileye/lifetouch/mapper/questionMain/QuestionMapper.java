@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface QuestionMapper {
 
-    List<QuestionModel> listSelect(String useYn);
+    List<QuestionModel> listSelect(QuestionModel questionModel);
 
     QuestionModel detailSelect(String key);
 
@@ -17,4 +17,6 @@ public interface QuestionMapper {
     void delete(QuestionModel questionModel);
 
     void update(QuestionModel questionModel);
+
+    void sortUpdate(QuestionModel questionModel);
 }

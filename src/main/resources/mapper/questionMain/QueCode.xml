@@ -16,6 +16,7 @@
     <select id="midCtgListSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
         SELECT DISTINCT Q000_MIDCTGCD AS KEY,
                         Q000_LRGCTGCD AS LRGCTGCD,
+                        Q000_LRGCTGNM AS LRGCTGNM,
                         Q000_MIDCTGCD AS MIDCTGCD,
                         Q000_MIDCTGNM AS MIDCTGNM,
                         Q000_MIDCTGSORT AS SORT

@@ -27,5 +27,9 @@ public class QuestionModel {
     private String upUserId;
     private String upUserIp;
 
+    private String searchDate;
+
+
+
 
 }
