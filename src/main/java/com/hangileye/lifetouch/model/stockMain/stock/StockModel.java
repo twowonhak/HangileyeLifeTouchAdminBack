@@ -32,6 +32,8 @@ public class StockModel extends BaseModel {
     private String  ip;                 // IP
     private String  ms;                 // 오피스
     private String  hwp;                // 한글
+    private String  eye;                // 아이리더
+    private String  pacs;               // 팍스
     private String  useYn;              // 삭제여부
     private String  memo;               // 메모
     private String  crDtime;            // 등록일시

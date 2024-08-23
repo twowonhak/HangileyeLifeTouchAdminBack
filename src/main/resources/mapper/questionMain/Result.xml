@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.questionMain.QueResultMapper">
+
+    <select id="lrgSortSelect" parameterType="String" resultType="String">
+        SELECT LRGCTGCD
+        FROM (
+                 SELECT DISTINCT Q000_LRGCTGCD AS LRGCTGCD, Q000_LRGCTGSORT
+                 FROM HANGIL.TB_Q000_QUECODE
+                 WHERE Q000_LRGCTGCD IN #{lrgCtgCdArr}
+             )
+        ORDER BY Q000_LRGCTGSORT ASC
+    </select>
+
+    <select id="commonQuestionSelect" resultType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        SELECT
+            Q001_KEY AS KEY,
+            Q001_LRGCTGCD AS LRGCTGCD,
+            Q000_LRGCTGNM AS LRGCTGNM,
+            Q001_MIDCTGCD AS MIDCTGCD,
+            Q000_MIDCTGNM AS MIDCTGNM,
+            Q001_QUETXT AS QUETXT,
+            Q000_LRGCTGSORT AS LRGCTGSORT,
+            Q000_MIDCTGSORT AS MIDCTGSORT
+        FROM HANGIL.TB_Q001_QUESTION
+            LEFT JOIN HANGIL.TB_Q000_QUECODE ON  Q000_LRGCTGCD = Q001_LRGCTGCD AND Q000_MIDCTGCD = Q001_MIDCTGCD
+        WHERE Q001_USEYN = 'Y'
+          AND Q001_LRGCTGCD = '00'
+          AND Q001_MIDCTGCD = '01'
+          AND Q001_USEENDDAT >= TO_CHAR(SYSDATE,'YYYYMMDD')
+        ORDER BY Q001_SORT ASC
+    </select>
+
+    <select id="lastQuestionSelect" resultType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        SELECT
+            Q001_KEY AS KEY,
+            Q001_LRGCTGCD AS LRGCTGCD,
+            Q000_LRGCTGNM AS LRGCTGNM,
+            Q001_MIDCTGCD AS MIDCTGCD,
+            Q000_MIDCTGNM AS MIDCTGNM,
+            Q001_QUETXT AS QUETXT,
+            Q000_LRGCTGSORT AS LRGCTGSORT,
+            Q000_MIDCTGSORT AS MIDCTGSORT
+        FROM HANGIL.TB_Q001_QUESTION
+            LEFT JOIN HANGIL.TB_Q000_QUECODE ON  Q000_LRGCTGCD = Q001_LRGCTGCD AND Q000_MIDCTGCD = Q001_MIDCTGCD
+        WHERE Q001_USEYN = 'Y'
+          AND Q001_LRGCTGCD = '99'
+          AND Q001_MIDCTGCD = '01'
+          AND Q001_USEENDDAT >= TO_CHAR(SYSDATE,'YYYYMMDD')
+        ORDER BY Q001_SORT ASC
+    </select>
+
+    <select id="questionSelect" parameterType="com.hangileye.lifetouch.model.questionMain.QueResultModel" resultType="com.hangileye.lifetouch.model.questionMain.QuestionModel">
+        SELECT
+            Q001_KEY AS KEY,
+            Q001_LRGCTGCD AS LRGCTGCD,
+            Q000_LRGCTGNM AS LRGCTGNM,
+            Q001_MIDCTGCD AS MIDCTGCD,
+            Q000_MIDCTGNM AS MIDCTGNM,
+            Q001_QUETXT AS QUETXT,
+            Q000_LRGCTGSORT AS LRGCTGSORT,
+            Q000_MIDCTGSORT AS MIDCTGSORT
+        FROM HANGIL.TB_Q001_QUESTION
+            LEFT JOIN HANGIL.TB_Q000_QUECODE ON  Q000_LRGCTGCD = Q001_LRGCTGCD AND Q000_MIDCTGCD = Q001_MIDCTGCD
+        WHERE Q001_USEYN = 'Y'
+          AND Q001_LRGCTGCD = #{lrgCtgCd}
+          AND Q001_MIDCTGCD = #{midCtgCd}
+          AND Q001_USEENDDAT >= TO_CHAR(SYSDATE,'YYYYMMDD')
+          ORDER BY Q001_SORT ASC
+    </select>
+
+    <select id="exampleSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.ExampleModel">
+        SELECT  Q002_KEY AS KEY,
+                Q002_QUEKEY AS QUEKEY,
+                Q002_TYPE AS TYPE,
+                Q002_EXATXT AS EXATXT,
+                Q002_SORT AS SORT
+        FROM HANGIL.TB_Q002_EXAMPLE
+        WHERE Q002_QUEKEY = #{key}
+          AND Q002_USEYN = 'Y'
+        ORDER BY Q002_SORT ASC
+    </select>
+
+
+</mapper>

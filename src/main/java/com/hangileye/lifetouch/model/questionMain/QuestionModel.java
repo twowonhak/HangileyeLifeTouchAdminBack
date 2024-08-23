@@ -14,6 +14,9 @@ public class QuestionModel {
     private String lrgCtgCd;
     private String midCtgCd;
 
+    private String lrgCtgNm;
+    private String midCtgNm;
+
     private String queTxt;
     private String useStrDat;
     private String useEndDat;
@@ -29,7 +32,8 @@ public class QuestionModel {
 
     private String searchDate;
 
-
+    private String lrgCtgSort;
+    private String midCtgSort;
 
 
 }

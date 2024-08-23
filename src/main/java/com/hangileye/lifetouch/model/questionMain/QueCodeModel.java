@@ -29,5 +29,8 @@ public class QueCodeModel {
     private String upUserId;
     private String upUserIp;
 
+    private String comm;
+
 
 }
+

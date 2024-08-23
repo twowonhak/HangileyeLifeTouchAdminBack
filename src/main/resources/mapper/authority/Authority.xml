@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.authority.AuthorityMapper">
+
+    <select id="searchSelect" parameterType="String"
+            resultType="com.hangileye.lifetouch.model.authority.AuthorityModel">
+        SELECT P110_USER_ID                         AS ID,
+               P110_USER_NM                         AS NAME,
+               FN_EDIT_INFO('W009', P110_USER_DEPT) AS DEPT
+        FROM TB_P110_EMPLOYEE
+        WHERE P110_USER_ID = #{searchInfo}
+           OR P110_USER_NM = #{searchInfo}
+            AND P110_END_DATE IS NULL
+            AND ROWNUM = 1
+        ORDER BY P110_APPLY_DATE ASC
+    </select>
+
+    <select id="useMenuSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.common.MenuModel">
+        SELECT A002_MENUCD AS MENUCD,
+               A001_MENUNM AS MENUNM
+        FROM HANGIL.TB_A002_AUTHORITY
+                 LEFT JOIN HANGIL.TB_A001_MENU ON A001_MENUCD = A002_MENUCD
+        WHERE A002_USERID = #{id}
+        ORDER BY A002_MENUCD ASC
+    </select>
+
+    <select id="unUseMenuSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.common.MenuModel">
+        SELECT A001_MENUCD AS MENUCD,
+               A001_MENUNM AS MENUNM
+        FROM HANGIL.TB_A001_MENU
+        WHERE A001_MENUCD NOT IN (SELECT A002_MENUCD FROM HANGIL.TB_A002_AUTHORITY WHERE A002_USERID = #{id})
+
+    </select>
+
+    <delete id="useMenuDelete" parameterType="String">
+        DELETE
+        FROM HANGIL.TB_A002_AUTHORITY
+                WHERE A002_USERID = #{userIid}
+    </delete>
+
+    <insert id="useMenuInsert" parameterType="com.hangileye.lifetouch.model.common.MenuModel">
+        INSERT INTO HANGIL.TB_A002_AUTHORITY (A002_MENUCD,
+                                              A002_USERID)
+        VALUES (#{menuCd},
+                #{userId})
+    </insert>
+
+</mapper>

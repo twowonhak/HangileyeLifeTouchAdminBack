@@ -82,6 +82,22 @@ public class StockService extends ErrorHistory {
         }
     }
 
+    /*
+     * @Description : 저장
+     * */
+    @Transactional
+    public ResponseEntity<ResponseData> firstInsert(StockModel stockModel, HttpServletRequest request) {
+        ResponseData res = new ResponseData();
+        try {
+            stockMapper.firstInsert(stockModel);
+            res.setData(stockModel.getId());
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHistory(request, res, errorMapper, e);
+        }
+    }
+
 
     /*
      * @Description : 목록 조회

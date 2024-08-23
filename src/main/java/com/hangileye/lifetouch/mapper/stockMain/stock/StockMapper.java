@@ -15,6 +15,8 @@ public interface StockMapper {
 
     void insert(StockModel stockModel);
 
+    void firstInsert(StockModel stockModel);
+
     StockModel detailSelect(String id);
 
     void update(StockModel stockModel);
@@ -30,4 +32,5 @@ public interface StockMapper {
     List<AssetModel> assetListSelect();
 
     List<CodeModel> codeListSelect();
+
 }

@@ -39,16 +39,18 @@ public class LoginService extends ErrorHistory {
             LoginModel model = loginMapper.login(loginModel);
             // 로그인
             if (model != null) {
-                // 권한체크
-                if (loginMapper.loginRight(model.getId()) == 1) {
-                    CookieManager.setCookie(response, "ID", model.getId());
-                    CookieManager.setCookie(response, "NAME", model.getName());
-                    log.info("로그인 성공");
-                    res.setData(model);
-                    res.setSuccess();
-                } else {
-                    res.setNoRight();
-                }
+                res.setData(model);
+                res.setSuccess();
+                CookieManager.setCookie(response, "ID", model.getId());
+                CookieManager.setCookie(response, "NAME", model.getName());
+//                // 권한체크
+//                if (loginMapper.loginRight(model.getId()) == 1) {
+//                    log.info("로그인 성공");
+//                    res.setData(model);
+//                    res.setSuccess();
+//                } else {
+//                    res.setNoRight();
+//                }
             } else {
                 res.setNoLoginInfo();
             }

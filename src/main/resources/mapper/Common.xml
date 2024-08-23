@@ -3,6 +3,18 @@
 
 <mapper namespace="com.hangileye.lifetouch.mapper.CommonMapper">
 
+    <select id="mainMenuSelect" parameterType="com.hangileye.lifetouch.model.common.MenuModel" resultType="com.hangileye.lifetouch.model.common.MenuModel">
+        SELECT
+            A001_MENUCD AS MENUCD,
+            A001_MENUNM AS MENUNM,
+            A001_LINK AS LINK
+        FROM HANGIL.TB_A001_MENU
+        WHERE A001_MENUCD IN ( SELECT A002_MENUCD
+                               FROM HANGIL.TB_A002_AUTHORITY
+                               WHERE A002_USERID = #{userId})
+        ORDER BY A001_MENUNM ASC
+    </select>
+
     <!-- 과 리스트 조회 -->
     <select id="diagListSelect" resultType="com.hangileye.lifetouch.model.common.DiagModel">
         SELECT

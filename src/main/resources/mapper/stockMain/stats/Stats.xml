@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.stockMain.stats.StatsMapper">
+
+    <select id="mainListSelect" resultType="com.hangileye.lifetouch.model.stockMain.asset.AssetModel">
+        SELECT
+            D002_MAINKEY AS ASSMAINKEY,
+            D002_MAINNM AS ASSMAINNM
+        FROM HANGIL.TB_D002_ASSETCODE
+        GROUP BY D002_MAINKEY, D002_MAINNM, D002_SORT
+        ORDER BY D002_SORT ASC
+
+    </select>
+
+    <select id="subListSelect" resultType="com.hangileye.lifetouch.model.stockMain.asset.AssetModel">
+        SELECT
+            D002_MAINKEY AS ASSMAINKEY,
+            D002_MAINNM AS ASSMAINNM,
+            D002_SUBKEY AS ASSSUBKEY,
+            D002_SUBNM AS ASSSUBNM,
+            (SELECT
+                 COUNT(*)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN IN ('Y', 'N')) AS TOTALCOUNT,
+            (SELECT
+                 COUNT(*)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'Y') AS USECOUNT,
+            (SELECT
+                 COUNT(*)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'N') AS NOTUSECOUNT
+        FROM HANGIL.TB_D002_ASSETCODE
+        ORDER BY D002_SORT, D002_SUBKEY ASC
+    </select>
+
+</mapper>

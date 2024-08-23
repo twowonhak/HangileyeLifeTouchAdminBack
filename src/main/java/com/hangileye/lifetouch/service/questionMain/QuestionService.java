@@ -7,8 +7,6 @@ import com.hangileye.lifetouch.model.questionMain.QueCodeModel;
 import com.hangileye.lifetouch.model.questionMain.QuestionModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import com.hangileye.lifetouch.utill.ErrorHistory;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,8 +41,8 @@ public class QuestionService extends ErrorHistory {
         ResponseData res = new ResponseData();
         try {
             Map<String, List<QueCodeModel>> map = new HashMap<>();
-            map.put("lrgCode", queCodeMapper.lrgCtgListSelect());
-            map.put("midCode", queCodeMapper.midCtgListSelect(null));
+            map.put("lrgCtg", queCodeMapper.lrgCtgListSelect(null));
+            map.put("midCtg", queCodeMapper.midCtgListSelect(null));
             res.setData(map);
             res.setSuccess();
             return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);

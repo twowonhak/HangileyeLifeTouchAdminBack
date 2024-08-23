@@ -1,8 +1,10 @@
 package com.hangileye.lifetouch.controller;
 
+import com.hangileye.lifetouch.model.common.MenuModel;
 import com.hangileye.lifetouch.model.common.PatInfoModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import com.hangileye.lifetouch.service.CommonService;
+import com.hangileye.lifetouch.utill.CookieManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,15 @@ public class CommonController {
         this.commonService = commonService;
     }
 
+
+    /*
+     * @Description : 관리자 메인 메뉴 목록
+     * */
+    @RequestMapping("/mainMenuSelectApi")
+    public ResponseData mainMenuSelect(HttpServletRequest request, MenuModel menuModel) {
+        menuModel.setUserId(CookieManager.getCookie(request, "ID"));
+        return commonService.mainMenuSelect(request,menuModel).getBody();
+    }
 
     /*
      * @Description : 과 리스트 조회

@@ -1,9 +1,6 @@
 package com.hangileye.lifetouch.controller.stockMain.stock;
 
-import com.hangileye.lifetouch.model.ErrorModel;
-import com.hangileye.lifetouch.model.stockMain.asset.AssetModel;
 import com.hangileye.lifetouch.model.stockMain.stock.StockModel;
-import com.hangileye.lifetouch.model.stockMain.stock.TeamModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import com.hangileye.lifetouch.service.stockMain.stock.StockService;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +47,14 @@ public class StockController {
     @RequestMapping("insertApi")
     public ResponseData insert(@RequestBody StockModel stockModel, HttpServletRequest request) {
         return stockService.insert(stockModel, request).getBody();
+    }
+
+    /*
+     * @Description : 입고 및 안전재고
+     * */
+    @RequestMapping("firstInsertApi")
+    public ResponseData firstInsert(@RequestBody StockModel stockModel, HttpServletRequest request) {
+        return stockService.firstInsert(stockModel, request).getBody();
     }
 
     /*

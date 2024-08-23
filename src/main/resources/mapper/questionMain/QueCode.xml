@@ -3,7 +3,20 @@
 
 <mapper namespace="com.hangileye.lifetouch.mapper.questionMain.QueCodeMapper">
 
-    <select id="lrgCtgListSelect" resultType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+    <select id="lrgCtgListSelect" parameterType="String" resultType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
+        SELECT DISTINCT Q000_LRGCTGCD AS KEY,
+                        Q000_LRGCTGCD AS LRGCTGCD,
+                        Q000_LRGCTGNM AS LRGCTGNM,
+                        Q000_LRGCTGSORT AS SORT
+        FROM HANGIL.TB_Q000_QUECODE
+        WHERE Q000_LRGCTGUSEYN = 'Y'
+        <if test="comm == 'Y'.toString()">
+          AND Q000_LRGCTGCD NOT IN ('00','99')
+        </if>
+        ORDER BY Q000_LRGCTGSORT ASC
+    </select>
+
+    <select id="queLrgCtgListSelect" resultType="com.hangileye.lifetouch.model.questionMain.QueCodeModel">
         SELECT DISTINCT Q000_LRGCTGCD AS KEY,
                         Q000_LRGCTGCD AS LRGCTGCD,
                         Q000_LRGCTGNM AS LRGCTGNM,

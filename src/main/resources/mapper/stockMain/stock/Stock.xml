@@ -66,7 +66,9 @@
             D004_OPTION
             FROM HANGIL.TB_D004_CODE
             WHERE D004_CODE = 'HWP'
-            AND D004_OPTION = D001_HWP) AS HWP
+            AND D004_OPTION = D001_HWP) AS HWP,
+        D001_EYE AS EYE,
+        D001_PACS AS PACS
         FROM HANGIL.TB_D001_STOCK
         WHERE 1=1
         <if test="assMainCd != null and assMainCd != ''">
@@ -103,7 +105,9 @@
          D001_YEAR,
          D001_IP,
          D001_MS,
-         D001_HWP)
+         D001_HWP,
+         D001_EYE,
+         D001_PACS)
         VALUES ((SELECT LPAD(NVL(MAX(D001_ID), 0) + 1, 8, '0') FROM HANGIL.TB_D001_STOCK),
                 #{assMainCd}||#{assSubCd},
                 #{buil},
@@ -114,8 +118,23 @@
                 #{year},
                 #{ip},
                 #{ms},
-                #{hwp})
+                #{hwp},
+                #{eye},
+                #{pacs})
 
+        <selectKey keyProperty="id" resultType="String" order="AFTER">
+            SELECT MAX(D001_ID) AS ID FROM HANGIL.TB_D001_STOCK
+        </selectKey>
+    </insert>
+
+    <insert id="firstInsert" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
+        INSERT INTO HANGIL.TB_D001_STOCK
+        (D001_ID,
+        D001_ASSCD,
+         D001_USEYN)
+        VALUES ((SELECT LPAD(NVL(MAX(D001_ID), 0) + 1, 8, '0') FROM HANGIL.TB_D001_STOCK),
+        #{assMainCd}||#{assSubCd},
+                'N')
         <selectKey keyProperty="id" resultType="String" order="AFTER">
             SELECT MAX(D001_ID) AS ID FROM HANGIL.TB_D001_STOCK
         </selectKey>
@@ -135,6 +154,7 @@
              FROM HANGIL.TB_D002_ASSETCODE
              WHERE D002_MAINKEY = SUBSTR(D001_ASSCD,1,2)
                AND D002_SUBKEY = SUBSTR(D001_ASSCD,3,2)) AS ASSNM,
+            SUBSTR(D001_ASSCD, 0, 2)      AS ASSMAINCD,
             D001_BUIL       AS BUIL,
             D001_TEAM       AS TEAM,
             D001_FLOOR      AS FLOOR,
@@ -156,6 +176,8 @@
                 FROM HANGIL.TB_D004_CODE
                 WHERE D004_CODE = 'HWP'
                 AND D004_OPTION = D001_HWP) AS HWP,
+          D001_EYE AS EYE,
+            D001_PACS AS PACS,
             D001_USEYN      AS USEYN,
             D001_MEMO       AS MEMO
         FROM HANGIL.TB_D001_STOCK
@@ -175,6 +197,8 @@
         D001_HWP = #{hwp},
         D001_MS = #{ms},
         D001_MEMO = #{memo},
+        D001_EYE = #{eye},
+        D001_PACS = #{pacs},
         D001_UPDTIME = SYSDATE
         WHERE D001_ID = #{id}
     </update>
@@ -201,6 +225,8 @@
             D001_IP      = '',
             D001_MS      = '',
             D001_HWP     = '',
+            D001_EYE = '',
+            D001_PACS = '',
             <if test="memo != null and memo != ''">
                 D001_MEMO    = #{memo},
             </if>
@@ -220,6 +246,8 @@
             D001_IP      = #{ip},
             D001_MS      = #{ms},
             D001_HWP     = #{hwp},
+            D001_EYE = #{eye},
+            D001_PACS = #{pacs},
             D001_MEMO    = #{memo},
             D001_USEYN   = 'Y',
             D001_UPDTIME = SYSDATE

@@ -15,4 +15,9 @@ public class AssetModel {
     private String assSubKey;
     private String assSubNm;
 
+    private String totalCount;
+    private String useCount;
+    private String notUseCount;
+
+
 }

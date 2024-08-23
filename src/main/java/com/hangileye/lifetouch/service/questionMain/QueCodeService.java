@@ -32,7 +32,7 @@ public class QueCodeService extends ErrorHistory {
         ResponseData res = new ResponseData();
         try {
             Map<Object, List<QueCodeModel>> map = new HashMap<>();
-            map.put("lagCtg", queCodeMapper.lrgCtgListSelect());
+            map.put("lrgCtg", queCodeMapper.lrgCtgListSelect(queCodeModel.getComm()));
             map.put("midCtg", queCodeMapper.midCtgListSelect(queCodeModel.getLrgCtgCd()));
             res.setData(map);
             res.setSuccess();

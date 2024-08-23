@@ -2,6 +2,7 @@ package com.hangileye.lifetouch.service;
 
 import com.hangileye.lifetouch.mapper.CommonMapper;
 import com.hangileye.lifetouch.mapper.ErrorMapper;
+import com.hangileye.lifetouch.model.common.MenuModel;
 import com.hangileye.lifetouch.model.common.PatInfoModel;
 import com.hangileye.lifetouch.resultCode.ResponseData;
 import com.hangileye.lifetouch.utill.ErrorHistory;
@@ -24,6 +25,18 @@ public class CommonService extends ErrorHistory {
     public CommonService(CommonMapper commonMapper, ErrorMapper errorMapper) {
         this.commonMapper = commonMapper;
         this.errorMapper = errorMapper;
+    }
+
+    @Transactional
+    public ResponseEntity<ResponseData> mainMenuSelect(HttpServletRequest request, MenuModel menuModel) {
+        ResponseData res = new ResponseData();
+        try {
+            res.setData(commonMapper.mainMenuSelect(menuModel));
+            res.setSuccess();
+            return new ResponseEntity<>(res, new HttpHeaders(), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHistory(request, res, errorMapper, e);
+        }
     }
 
     /*
@@ -78,4 +91,6 @@ public class CommonService extends ErrorHistory {
             return errorHistory(request, res, errorMapper, e);
         }
     }
+
+
 }

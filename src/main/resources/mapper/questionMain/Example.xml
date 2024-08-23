@@ -32,7 +32,7 @@
             VALUES ((SELECT LPAD(NVL(MAX(Q002_KEY),0) + 1, 4, '0') FROM HANGIL.TB_Q002_EXAMPLE),
                     #{queKey},
                     #{type},
-                    (SELECT LPAD(NVL(MAX(Q002_SORT),0) + 1, 2, '0') FROM HANGIL.TB_Q002_EXAMPLE),
+                    (SELECT LPAD(NVL(MAX(Q002_SORT),0) + 1, 2, '0') FROM HANGIL.TB_Q002_EXAMPLE  WHERE Q002_QUEKEY = #{queKey}),
                     #{exaTxt},
                     #{crUserId},
                     #{crUserIp})

@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface QueCodeMapper {
 
-    List<QueCodeModel> lrgCtgListSelect();
+    List<QueCodeModel> lrgCtgListSelect(String comm);
 
     List<QueCodeModel> midCtgListSelect(String lrgCtgCd);
 
@@ -31,4 +31,5 @@ public interface QueCodeMapper {
     QueCodeModel lrgCtgDetailSelect(String lrgCtgCd);
 
     QueCodeModel midCtgDetailSelect(QueCodeModel queCodeModel);
+
 }
