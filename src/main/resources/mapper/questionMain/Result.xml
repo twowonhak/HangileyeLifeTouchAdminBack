@@ -82,5 +82,4 @@
         ORDER BY Q002_SORT ASC
     </select>
 
-
 </mapper>

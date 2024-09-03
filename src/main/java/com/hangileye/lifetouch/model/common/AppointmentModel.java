@@ -23,5 +23,10 @@ public class AppointmentModel {
     private String appoNm;          // 예약구분 명
     private String vistYn;          // 방문여부
     private String queYn;           // 문진표 작성여부
+    private String recvTm;
+    private String type;
+    private String vistDat;
+
+
 
 }

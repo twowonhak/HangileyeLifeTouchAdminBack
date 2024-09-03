@@ -12,4 +12,12 @@ import lombok.Data;
 public class CodeModel {
     private String  codeNm;
     private String  optionNm;
+    private String  count;
+
+    private String  totalCount;
+    private String  useCount;
+    private String  notUseCount;
+
+
+
 }

@@ -187,18 +187,42 @@
     <update id="update" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
         UPDATE HANGIL.TB_D001_STOCK
         SET
-        D001_BUIL = #{buil},
-        D001_TEAM = #{team},
-        D001_FLOOR = #{floor},
-        D001_PLACE = #{place},
-        D001_USER = #{userNm},
-        D001_IP = #{ip},
-        D001_YEAR = #{year},
-        D001_HWP = #{hwp},
-        D001_MS = #{ms},
-        D001_MEMO = #{memo},
-        D001_EYE = #{eye},
-        D001_PACS = #{pacs},
+        <if test="buil != null and buil != ''">
+            D001_BUIL = #{buil},
+        </if>
+        <if test="team != null and team != ''">
+            D001_TEAM = #{team},
+        </if>
+        <if test="floor != null and floor != ''">
+            D001_FLOOR = #{floor},
+        </if>
+        <if test="place != null and place != ''">
+            D001_PLACE = #{place},
+        </if>
+        <if test="userNm != null and userNm != ''">
+            D001_USER = #{userNm},
+        </if>
+        <if test="ip != null and ip != ''">
+            D001_IP = #{ip},
+        </if>
+        <if test="year != null and year != ''">
+            D001_YEAR = #{year},
+        </if>
+        <if test="hwp != null and hwp != ''">
+            D001_HWP = #{hwp},
+        </if>
+        <if test="ms != null and ms != ''">
+            D001_MS = #{ms},
+        </if>
+        <if test="memo != null and memo != ''">
+            D001_MEMO = #{memo},
+        </if>
+        <if test="eye != null and eye != ''">
+            D001_EYE = #{eye},
+        </if>
+        <if test="pacs != null and pacs != ''">
+            D001_PACS = #{pacs},
+        </if>
         D001_UPDTIME = SYSDATE
         WHERE D001_ID = #{id}
     </update>
@@ -237,18 +261,43 @@
 
     <update id="use" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
         UPDATE HANGIL.TB_D001_STOCK
-        SET D001_BUIL    = #{buil},
-            D001_TEAM    = #{team},
-            D001_FLOOR   = #{floor},
-            D001_PLACE   = #{place},
-            D001_USER    = #{userNm},
-            D001_YEAR    = #{year},
-            D001_IP      = #{ip},
-            D001_MS      = #{ms},
-            D001_HWP     = #{hwp},
+        SET
+        <if test="buil != null and buil != ''">
+            D001_BUIL = #{buil},
+        </if>
+        <if test="team != null and team != ''">
+            D001_TEAM = #{team},
+        </if>
+        <if test="floor != null and floor != ''">
+            D001_FLOOR = #{floor},
+        </if>
+        <if test="place != null and place != ''">
+            D001_PLACE = #{place},
+        </if>
+        <if test="userNm != null and userNm != ''">
+            D001_USER = #{userNm},
+        </if>
+        <if test="ip != null and ip != ''">
+            D001_IP = #{ip},
+        </if>
+        <if test="year != null and year != ''">
+            D001_YEAR = #{year},
+        </if>
+        <if test="hwp != null and hwp != ''">
+            D001_HWP = #{hwp},
+        </if>
+        <if test="ms != null and ms != ''">
+            D001_MS = #{ms},
+        </if>
+        <if test="memo != null and memo != ''">
+            D001_MEMO = #{memo},
+        </if>
+        <if test="eye != null and eye != ''">
             D001_EYE = #{eye},
+        </if>
+        <if test="pacs != null and pacs != ''">
             D001_PACS = #{pacs},
-            D001_MEMO    = #{memo},
+        </if>
             D001_USEYN   = 'Y',
             D001_UPDTIME = SYSDATE
         WHERE D001_ID = #{id}

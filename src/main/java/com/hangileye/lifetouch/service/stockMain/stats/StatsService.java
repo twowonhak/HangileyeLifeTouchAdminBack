@@ -35,10 +35,17 @@ public class StatsService extends ErrorHistory {
         try {
 
             Map map = new HashMap<>();
+            Map sMap = new HashMap<>();
+            Map lMap = new HashMap<>();
 
-            map.put("assetMain", statsMapper.mainListSelect());
-            map.put("assetSub", statsMapper.subListSelect());
+            sMap.put("assetMain", statsMapper.mainListSelect());
+            sMap.put("assetSub", statsMapper.subListSelect());
 
+            lMap.put("dis", statsMapper.disLicenseListSelect());
+            lMap.put("doc", statsMapper.docLicenseListSelect());
+
+            map.put("stock", sMap);
+            map.put("license", lMap);
 
             res.setData(map);
             res.setSuccess();

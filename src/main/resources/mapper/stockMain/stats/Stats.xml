@@ -10,7 +10,6 @@
         FROM HANGIL.TB_D002_ASSETCODE
         GROUP BY D002_MAINKEY, D002_MAINNM, D002_SORT
         ORDER BY D002_SORT ASC
-
     </select>
 
     <select id="subListSelect" resultType="com.hangileye.lifetouch.model.stockMain.asset.AssetModel">
@@ -20,25 +19,84 @@
             D002_SUBKEY AS ASSSUBKEY,
             D002_SUBNM AS ASSSUBNM,
             (SELECT
-                 COUNT(*)
+                 COUNT(1)
              FROM HANGIL.TB_D001_STOCK
              WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
                AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
                AND D001_USEYN IN ('Y', 'N')) AS TOTALCOUNT,
             (SELECT
-                 COUNT(*)
+                 COUNT(1)
              FROM HANGIL.TB_D001_STOCK
              WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
                AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
                AND D001_USEYN = 'Y') AS USECOUNT,
             (SELECT
-                 COUNT(*)
+                 COUNT(1)
              FROM HANGIL.TB_D001_STOCK
              WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
                AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
                AND D001_USEYN = 'N') AS NOTUSECOUNT
         FROM HANGIL.TB_D002_ASSETCODE
         ORDER BY D002_SORT, D002_SUBKEY ASC
+    </select>
+
+    <select id="disLicenseListSelect" resultType="com.hangileye.lifetouch.model.stockMain.stock.CodeModel">
+        SELECT
+            D004_CODE AS CODENM,
+            D004_OPTION AS TOTALCOUNT,
+            (SELECT COUNT(D001_EYE)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE D004_USEYN = 'Y') AS USECOUNT,
+            D004_OPTION - (SELECT COUNT(D001_EYE)
+                           FROM HANGIL.TB_D001_STOCK
+                           WHERE D004_USEYN = 'Y') AS NOTUSECOUNT
+        FROM HANGIL.TB_D004_CODE
+        WHERE D004_CODE = 'EYE_READER'
+        UNION ALL
+        SELECT
+            D004_CODE AS CODENM,
+            D004_OPTION AS TOTALCOUNT,
+            (SELECT COUNT(D001_PACS)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE D004_USEYN = 'Y') AS USECOUNT,
+            D004_OPTION - (SELECT COUNT(D001_PACS)
+                           FROM HANGIL.TB_D001_STOCK
+                           WHERE D004_USEYN = 'Y') AS NOTUSECOUNT
+        FROM HANGIL.TB_D004_CODE
+        WHERE D004_CODE = 'PACS'
+    </select>
+
+    <select id="docLicenseListSelect" resultType="com.hangileye.lifetouch.model.stockMain.stock.CodeModel">
+        SELECT
+            CODENM,
+            OPTIONNM,
+            COUNT
+        FROM
+            (
+                SELECT
+                    D004_CODE AS CODENM,
+                    D004_OPTION AS OPTIONNM,
+                    (SELECT
+                         COUNT(1)
+                     FROM HANGIL.TB_D001_STOCK
+                     WHERE D001_HWP = D004_OPTION
+                       AND D004_USEYN = 'Y') AS COUNT
+                FROM HANGIL.TB_D004_CODE
+                WHERE D004_CODE = 'HWP'
+                  AND D004_USEYN = 'Y'
+                UNION ALL
+                SELECT
+                    D004_CODE AS CODENM,
+                    D004_OPTION AS OPTIONNM,
+                    (SELECT
+                    COUNT(1)
+                    FROM HANGIL.TB_D001_STOCK
+                    WHERE D001_MS = D004_OPTION
+                    AND D004_USEYN = 'Y')  AS COUNT
+                FROM HANGIL.TB_D004_CODE
+                WHERE D004_CODE = 'MS'
+                  AND D004_USEYN = 'Y'
+            )
     </select>
 
 </mapper>

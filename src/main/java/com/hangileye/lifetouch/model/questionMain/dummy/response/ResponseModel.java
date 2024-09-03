@@ -17,11 +17,10 @@ public class ResponseModel {
     private String doctCd;              // 진료과 코드
     private String doctNm;              // 진료의 이름
     
-    private String patCase;             // 환자 케이스 키
     private String key;                 // 질문 키
     private String queTxt;              // 질문 내용
     private String exaKey;              // 보기 키
-    private String exatype;             // 타입 [ T : 텍스트 / C : 체크박스  ]
+    private String exaType;             // 타입 [ T : 텍스트 / C : 체크박스  ]
     private String exaTxt;              // 보기 내용
     private String resTxt;              // 답변 내용
 
