@@ -76,4 +76,9 @@ public class ResponseData {
         resultMessage = ResultEnum.ERR_USE.getMessage();
     }
 
+    public void setNoExcelData() {
+        resultCode = ResultEnum.NO_EXCEL_DATA.getCode();
+        resultMessage = ResultEnum.NO_EXCEL_DATA.getMessage();
+    }
+
 }

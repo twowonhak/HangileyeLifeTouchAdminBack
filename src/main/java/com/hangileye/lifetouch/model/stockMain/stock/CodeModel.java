@@ -16,6 +16,7 @@ public class CodeModel {
 
     private String  totalCount;
     private String  useCount;
+
     private String  notUseCount;
 
 

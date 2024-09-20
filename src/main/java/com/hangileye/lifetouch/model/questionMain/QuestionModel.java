@@ -21,6 +21,7 @@ public class QuestionModel {
     private String useStrDat;
     private String useEndDat;
     private String sort;
+    private String mulYn;
 
     private String useYn;
     private String crDtime;

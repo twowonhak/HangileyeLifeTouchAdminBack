@@ -67,26 +67,27 @@
             FROM HANGIL.TB_D004_CODE
             WHERE D004_CODE = 'HWP'
             AND D004_OPTION = D001_HWP) AS HWP,
-        D001_EYE AS EYE,
+        D001_EYEEXA AS EYEEXA,
+        D001_EYECLI AS EYECLI,
         D001_PACS AS PACS
         FROM HANGIL.TB_D001_STOCK
         WHERE 1=1
-        <if test="assMainCd != null and assMainCd != ''">
+        <if test="assMainCd != null and !assMainCd.equals('')">
             AND SUBSTR(D001_ASSCD,1,2) = #{assMainCd}
         </if>
-        <if test="assSubCd != null and assSubCd != ''">
+        <if test="assSubCd != null and !assSubCd.equals('')">
             AND SUBSTR(D001_ASSCD,3,2) = #{assSubCd}
         </if>
-        <if test="buil != null and buil != ''">
+        <if test="buil != null and !buil.equals('')">
             AND D001_BUIL = #{buil}
         </if>
-        <if test="floor != null and floor != ''">
+        <if test="floor != null and !floor.equals('')">
             AND D001_FLOOR = #{floor}
         </if>
-        <if test="team != null and team != ''">
+        <if test="team != null and !team.equals('') and !team.equals('00')">
             AND D001_TEAM = #{team}
         </if>
-        <if test="useYn != null and useYn != ''">
+        <if test="useYn != null and !useYn.equals('')">
             AND D001_USEYN = #{useYn}
         </if>
 
@@ -106,7 +107,8 @@
          D001_IP,
          D001_MS,
          D001_HWP,
-         D001_EYE,
+         D001_EYEEXA,
+         D001_EYECLI,
          D001_PACS)
         VALUES ((SELECT LPAD(NVL(MAX(D001_ID), 0) + 1, 8, '0') FROM HANGIL.TB_D001_STOCK),
                 #{assMainCd}||#{assSubCd},
@@ -119,7 +121,8 @@
                 #{ip},
                 #{ms},
                 #{hwp},
-                #{eye},
+                #{eyeExa},
+                #{eyeCli},
                 #{pacs})
 
         <selectKey keyProperty="id" resultType="String" order="AFTER">
@@ -176,7 +179,8 @@
                 FROM HANGIL.TB_D004_CODE
                 WHERE D004_CODE = 'HWP'
                 AND D004_OPTION = D001_HWP) AS HWP,
-          D001_EYE AS EYE,
+          D001_EYEEXA AS EYEEXA,
+          D001_EYECLI AS EYECLI,
             D001_PACS AS PACS,
             D001_USEYN      AS USEYN,
             D001_MEMO       AS MEMO
@@ -217,8 +221,11 @@
         <if test="memo != null and memo != ''">
             D001_MEMO = #{memo},
         </if>
-        <if test="eye != null and eye != ''">
-            D001_EYE = #{eye},
+        <if test="eyeExa != null and eyeExa != ''">
+            D001_EYEEXA = #{eyeExa},
+        </if>
+        <if test="eyeCli != null and eyeCli != ''">
+            D001_EYECLI = #{eyeCli},
         </if>
         <if test="pacs != null and pacs != ''">
             D001_PACS = #{pacs},
@@ -229,12 +236,22 @@
 
     <update id="delete" parameterType="com.hangileye.lifetouch.model.stockMain.stock.StockModel">
         UPDATE HANGIL.TB_D001_STOCK
-        SET
-            D001_USEYN   = 'D',
+        SET D001_BUIL = '',
+        D001_TEAM = '',
+        D001_FLOOR = '',
+        D001_PLACE = '',
+        D001_USER = '',
+        D001_IP = '',
+        D001_MS = '',
+        D001_HWP = '',
+        D001_EYEEXA = '',
+        D001_EYECLI = '',
+        D001_PACS = '',
+        D001_USEYN = #{useYn},
         <if test="memo != null and memo != ''">
-            D001_MEMO    = #{memo},
+            D001_MEMO = #{memo},
         </if>
-            D001_UPDTIME = SYSDATE
+        D001_UPDTIME = SYSDATE
         WHERE D001_ID = #{id}
     </update>
 
@@ -249,7 +266,8 @@
             D001_IP      = '',
             D001_MS      = '',
             D001_HWP     = '',
-            D001_EYE = '',
+            D001_EYEEXA = '',
+            D001_EYECLI = '',
             D001_PACS = '',
             <if test="memo != null and memo != ''">
                 D001_MEMO    = #{memo},
@@ -292,8 +310,11 @@
         <if test="memo != null and memo != ''">
             D001_MEMO = #{memo},
         </if>
-        <if test="eye != null and eye != ''">
-            D001_EYE = #{eye},
+        <if test="eyeExa != null and eyeExa != ''">
+            D001_EYEEXA = #{eyeExa},
+        </if>
+        <if test="eyeCli != null and eyeCli != ''">
+            D001_EYECLI = #{eyeCli},
         </if>
         <if test="pacs != null and pacs != ''">
             D001_PACS = #{pacs},

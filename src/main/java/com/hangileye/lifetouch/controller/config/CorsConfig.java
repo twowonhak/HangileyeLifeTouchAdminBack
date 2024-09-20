@@ -7,6 +7,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+
 /*********************************************************************
     cors 관련 설정을 포함한 필터.
     기본적으로 서버 또는 지정된 특정 도메인의 요청만 허용하지만
@@ -23,7 +25,8 @@ public class CorsConfig {
         config.addAllowedOriginPattern("*"); // 허용할 도메인 목록 e.g. http://domain1.com
         config.addAllowedHeader("*");   // 허용할 헤더 목록
         config.addAllowedMethod("*");   // 허용할 메서드(GET, PUT, 등) 목록
-
+        config.setExposedHeaders(Arrays.asList("Access-Control-Allow-Headers", "Authorization, x-xsrf-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, " +
+                "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,RefreshToken,Content-Disposition"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);    // 지정한 url에 config 적용
 

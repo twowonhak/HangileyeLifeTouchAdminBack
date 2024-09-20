@@ -8,6 +8,7 @@
                Q001_LRGCTGCD AS LRGCTGCD,
                Q001_MIDCTGCD AS MIDVTGCD,
                Q001_QUETXT AS QUETXT,
+               Q001_MULYN AS MULYN,
                SUBSTR(Q001_USESTRDAT, 1, 4) || '-' || SUBSTR(Q001_USESTRDAT, 5, 2) || '-' || SUBSTR(Q001_USESTRDAT, 7, 2)    AS USESTRDAT,
                SUBSTR(Q001_USEENDDAT, 1, 4) || '-' || SUBSTR(Q001_USEENDDAT, 5, 2) || '-' || SUBSTR(Q001_USEENDDAT, 7, 2)    AS USEENDDAT
         FROM HANGIL. TB_Q001_QUESTION
@@ -27,6 +28,7 @@
                (SELECT Q000_LRGCTGNM FROM HANGIL.TB_Q000_QUECODE WHERE Q000_LRGCTGCD = Q001_LRGCTGCD) AS LRGCTGNM,
                (SELECT Q000_MIDCTGNM FROM HANGIL.TB_Q000_QUECODE WHERE Q001_MIDCTGCD = Q001_MIDCTGCD) AS MIDCTGNM,
                Q001_QUETXT AS QUETXT,
+               Q001_MULYN AS MULYN,
                SUBSTR(Q001_USESTRDAT, 1, 4) || '-' || SUBSTR(Q001_USESTRDAT, 5, 2) || '-' || SUBSTR(Q001_USESTRDAT, 7, 2) AS USESTRDAT,
                SUBSTR(Q001_USEENDDAT, 1, 4) || '-' || SUBSTR(Q001_USEENDDAT, 5, 2) || '-' || SUBSTR(Q001_USEENDDAT, 7, 2) AS USEENDDAT
         FROM HANGIL.TB_Q001_QUESTION
@@ -53,6 +55,7 @@
                Q001_MIDCTGCD AS MIDCTGCD,
                (SELECT DISTINCT Q000_MIDCTGNM FROM HANGIL.TB_Q000_QUECODE WHERE Q000_LRGCTGCD = Q001_LRGCTGCD AND Q000_MIDCTGCD = Q001_MIDCTGCD) AS MIDCTGNM,
                Q001_QUETXT AS QUETXT,
+               Q001_MULYN AS MULYN,
                SUBSTR(Q001_USESTRDAT, 1, 4) || '-' || SUBSTR(Q001_USESTRDAT, 5, 2) || '-' || SUBSTR(Q001_USESTRDAT, 7, 2) AS USESTRDAT,
                SUBSTR(Q001_USEENDDAT, 1, 4) || '-' || SUBSTR(Q001_USEENDDAT, 5, 2) || '-' || SUBSTR(Q001_USEENDDAT, 7, 2) AS USEENDDAT
         FROM HANGIL.TB_Q001_QUESTION
@@ -67,6 +70,7 @@
                                             Q001_USESTRDAT,
                                             Q001_USEENDDAT,
                                             Q001_SORT,
+                                            Q001_MULYN,
                                             Q001_CRUSERID,
                                             Q001_CRUSERIP)
         VALUES ((SELECT LPAD(NVL(MAX(Q001_KEY), 0) + 1, 4, '0') FROM HANGIL.TB_Q001_QUESTION),
@@ -76,6 +80,7 @@
                 REPLACE(#{useStrDat}, '-'),
                 REPLACE(#{useEndDat}, '-'),
                 (SELECT LPAD(NVL(MAX(Q001_SORT), 0) + 1, 2, '0') FROM HANGIL.TB_Q001_QUESTION WHERE Q001_LRGCTGCD = #{lrgCtgCd} AND Q001_MIDCTGCD = #{midCtgCd}),
+                #{mulYn},
                 #{crUserId},
                 #{crUserIp})
     </insert>
@@ -85,6 +90,7 @@
            SET Q001_LRGCTGCD = #{lrgCtgCd},
                Q001_MIDCTGCD = #{midCtgCd},
                Q001_QUETXT   = #{queTxt},
+               Q001_MULYN    = #{mulYn},
                Q001_USESTRDAT = REPLACE(#{useStrDat}, '-'),
                Q001_USEENDDAT = REPLACE(#{useEndDat}, '-'),
                Q001_UPDTIME  = SYSDATE,

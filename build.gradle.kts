@@ -55,16 +55,20 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.9")
 
 //    implementation("com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2")
-    implementation ("net.java.dev.jna:jna:5.12.1")
-    implementation ("net.java.dev.jna:jna-platform:5.12.1")
+    implementation("net.java.dev.jna:jna:5.12.1")
+    implementation("net.java.dev.jna:jna-platform:5.12.1")
 
     // JWT
-    implementation ("io.jsonwebtoken:jjwt-api:0.11.5")
-    implementation ("io.jsonwebtoken:jjwt-impl:0.11.5")
-    implementation ("io.jsonwebtoken:jjwt-jackson:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-    implementation ("org.aspectj:aspectjrt:1.9.6")
-    implementation ("org.aspectj:aspectjweaver:1.9.6")
+    implementation("org.aspectj:aspectjrt:1.9.6")
+    implementation("org.aspectj:aspectjweaver:1.9.6")
+
+//excel download : poi
+    implementation("org.apache.poi:poi:5.2.2")           // .xls 확장자
+    implementation("org.apache.poi:poi-ooxml:5.2.2")          // .xlsx 확장자
 }
 
 tasks.withType<Test> {

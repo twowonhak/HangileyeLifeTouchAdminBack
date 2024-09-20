@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hangileye.lifetouch.mapper.stockMain.state.StateMapper">
+
+    <select id="listSelect" parameterType="com.hangileye.lifetouch.model.stockMain.state.StateModel" resultType="com.hangileye.lifetouch.model.stockMain.state.StateModel">
+        SELECT
+            D002_MAINKEY AS ASSMAINKEY,
+            D002_MAINNM AS ASSMAINNM,
+            D002_SUBKEY AS ASSSUBKEY,
+            D002_SUBNM AS ASSSUBNM,
+            (SELECT
+                 COUNT(1)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'Y'
+               AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999) AS USE,
+            (SELECT
+                 COUNT(1)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'N'
+               AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999) AS NO,
+               (SELECT
+                 COUNT(1)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'W'
+               AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999) AS WAIT,
+               (SELECT
+                 COUNT(1)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'D'
+               AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999) AS DEL
+        FROM HANGIL.TB_D002_ASSETCODE
+        ORDER BY D002_SORT, D002_SUBKEY ASC
+    </select>
+
+    <select id="excelExport" parameterType="com.hangileye.lifetouch.model.common.ExcelModel" resultType="string">
+        SELECT
+            D002_MAINNM || '/' ||
+            D002_SUBNM || '/' ||
+            (SELECT
+                 COUNT(1)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'Y'
+               AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999) || '/' ||
+            (SELECT
+                 COUNT(1)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'N'
+               AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999) || '/' ||
+               (SELECT
+                 COUNT(1)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+               AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+               AND D001_USEYN = 'W'
+               AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999) || '/' ||
+            (SELECT
+            COUNT(1)
+            FROM HANGIL.TB_D001_STOCK
+            WHERE SUBSTR(D001_ASSCD, 1,2) = D002_MAINKEY
+            AND SUBSTR(D001_ASSCD, 3,2) = D002_SUBKEY
+            AND D001_USEYN = 'D'
+            AND NVL(D001_CRDTIME, D001_UPDTIME) BETWEEN TO_DATE(REPLACE(#{searchStart}, '-'), 'YYYYMMDD') AND TO_DATE(REPLACE(#{searchEnd}, '-'), 'YYYYMMDD') + 0.99999)
+        FROM HANGIL.TB_D002_ASSETCODE
+        ORDER BY D002_SORT, D002_SUBKEY ASC
+    </select>
+
+
+</mapper>

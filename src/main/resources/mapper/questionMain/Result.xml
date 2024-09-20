@@ -21,6 +21,7 @@
             Q001_MIDCTGCD AS MIDCTGCD,
             Q000_MIDCTGNM AS MIDCTGNM,
             Q001_QUETXT AS QUETXT,
+            DECODE(Q001_MULYN, 'Y', '다중선택', '단일선택') AS MULYN,
             Q000_LRGCTGSORT AS LRGCTGSORT,
             Q000_MIDCTGSORT AS MIDCTGSORT
         FROM HANGIL.TB_Q001_QUESTION
@@ -40,6 +41,7 @@
             Q001_MIDCTGCD AS MIDCTGCD,
             Q000_MIDCTGNM AS MIDCTGNM,
             Q001_QUETXT AS QUETXT,
+            DECODE(Q001_MULYN, 'Y', '다중선택', '단일선택') AS MULYN,
             Q000_LRGCTGSORT AS LRGCTGSORT,
             Q000_MIDCTGSORT AS MIDCTGSORT
         FROM HANGIL.TB_Q001_QUESTION
@@ -59,6 +61,7 @@
             Q001_MIDCTGCD AS MIDCTGCD,
             Q000_MIDCTGNM AS MIDCTGNM,
             Q001_QUETXT AS QUETXT,
+            DECODE(Q001_MULYN, 'Y', '다중선택', '단일선택') AS MULYN,
             Q000_LRGCTGSORT AS LRGCTGSORT,
             Q000_MIDCTGSORT AS MIDCTGSORT
         FROM HANGIL.TB_Q001_QUESTION
@@ -80,6 +83,24 @@
         WHERE Q002_QUEKEY = #{key}
           AND Q002_USEYN = 'Y'
         ORDER BY Q002_SORT ASC
+    </select>
+
+    <select id="stateExcelExport" parameterType="com.hangileye.lifetouch.model.common.ExcelModel" resultType="string">
+        SELECT Q003_CHARTNO                                                                       || '/' ||
+               FN_PATIENT_INFO(Q003_CHARTNO)                                                      || '/' ||
+               FN_SEX(Q003_CHARTNO)                                                               || '/' ||
+               FN_AGE((SELECT A110_BIRTH FROM TB_A110_PATINFO WHERE A110_CHARTNO = Q003_CHARTNO)) || '/' ||
+               Q003_VISTDAT                                                                       || '/' ||
+               DECODE(Q003_VISTTYPE, 'A', '예약', '당일')                                           || '/' ||
+               Q003_DIAGCD                                                                        || '/' ||
+               Q003_LRGCTGNM                                                                      || '/' ||
+               Q003_MIDCTGNM                                                                      || '/' ||
+               Q003_QUETXT                                                                        || '/' ||
+               Q003_EXATXT                                                                        || '/' ||
+               Q003_RESTXT
+        FROM HANGIL.TB_Q003_RESPONSE
+        WHERE Q003_VISTDAT BETWEEN REPLACE(#{searchStart}, '-') AND REPLACE(#{searchEnd}, '-')
+        ORDER BY Q003_VISTDAT DESC, Q003_RECVTM DESC, Q003_CHARTNO DESC, Q003_LRGCTGCD DESC, Q003_MIDCTGCD DESC, Q003_QUESORT DESC
     </select>
 
 </mapper>

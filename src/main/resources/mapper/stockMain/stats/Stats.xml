@@ -42,23 +42,28 @@
 
     <select id="disLicenseListSelect" resultType="com.hangileye.lifetouch.model.stockMain.stock.CodeModel">
         SELECT
-            D004_CODE AS CODENM,
-            D004_OPTION AS TOTALCOUNT,
-            (SELECT COUNT(D001_EYE)
+            D004_CODE                              AS CODENM,
+            D004_OPTION                            AS TOTALCOUNT,
+            '검사:'||
+            (SELECT COUNT(D001_EYEEXA)
              FROM HANGIL.TB_D001_STOCK
-             WHERE D004_USEYN = 'Y') AS USECOUNT,
-            D004_OPTION - (SELECT COUNT(D001_EYE)
+             WHERE D001_USEYN = 'Y')               ||
+            '/진료:'||
+            (SELECT COUNT(D001_EYECLI)
+             FROM HANGIL.TB_D001_STOCK
+             WHERE D001_USEYN = 'Y')               AS USECOUNT,
+            D004_OPTION - (SELECT COUNT(D001_EYEEXA) + COUNT(D001_EYECLI)
                            FROM HANGIL.TB_D001_STOCK
-                           WHERE D004_USEYN = 'Y') AS NOTUSECOUNT
+                           WHERE D001_USEYN = 'Y') AS NOTUSECOUNT
         FROM HANGIL.TB_D004_CODE
         WHERE D004_CODE = 'EYE_READER'
         UNION ALL
         SELECT
             D004_CODE AS CODENM,
             D004_OPTION AS TOTALCOUNT,
-            (SELECT COUNT(D001_PACS)
-             FROM HANGIL.TB_D001_STOCK
-             WHERE D004_USEYN = 'Y') AS USECOUNT,
+            TO_CHAR((SELECT COUNT(D001_PACS)
+                     FROM HANGIL.TB_D001_STOCK
+                     WHERE D001_USEYN = 'Y')) AS USECOUNT,
             D004_OPTION - (SELECT COUNT(D001_PACS)
                            FROM HANGIL.TB_D001_STOCK
                            WHERE D004_USEYN = 'Y') AS NOTUSECOUNT

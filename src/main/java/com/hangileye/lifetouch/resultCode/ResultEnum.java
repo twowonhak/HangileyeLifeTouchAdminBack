@@ -15,6 +15,7 @@ public enum ResultEnum implements Codable {
     ERR_NO_CHARTNO("2100", "입력 하신 정보의 차트번호와 URL KEY 값이 일치 하지 않습니다."),
     ERR_USE("2200", "사용 중인 데이터 입니다. 삭제를 원하시면 사용 중인 데이터를 삭제 해주세요."),
 
+    NO_EXCEL_DATA("9001", "해당 검색 조건에 조회 된 데이터가 없습니다."),
     ERR_SYSTEM("9999", "시스템 오류입니다.\n고객센터로 문의해주세요."),
     ERR_AUTH_REFRESH_TOKEN("1000", "토큰 정보가 없거나 유효기간이 만료되었습니다.");
 
